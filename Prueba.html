@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NFC - Redes de Comunicación Móvil</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Orbitron:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #0f172a;
+            color: #e2e8f0;
+            overflow: hidden;
+            /* Evita barras de scroll en modo presentación */
+        }
+
+        .digital-font {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        /* --- CLASES DE TRANSICIÓN DE DIAPOSITIVAS --- */
+        .slide {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease;
+            transform: scale(0.95);
+            display: flex;
+            flex-direction: column;
+            padding: 2rem 4rem;
+            padding-top: 6rem;
+            /* Espacio para el header fijo */
+            overflow: hidden;
+            /* Asegura que el contenido no desborde */
+        }
+
+        /* Clase especial para la portada (Layout libre) */
+        .slide.cover-slide {
+            padding: 3rem 4rem;
+            justify-content: center;
+        }
+
+        .slide.active {
+            opacity: 1;
+            pointer-events: all;
+            transform: scale(1);
+            z-index: 10;
+        }
+
+        /* --- ESTILOS VISUALES (Paneles de cristal, bordes neón) --- */
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+        }
+
+        .neon-border {
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
+            border-color: rgba(6, 182, 212, 0.5);
+        }
+
+        /* Animaciones para el simulador */
+        .data-packet {
+            position: absolute;
+            transition: left 1s linear, opacity 0.2s;
+            opacity: 0;
+        }
+
+        /* Estilos para el inspector de tramas */
+        .byte-block {
+            transition: all 0.2s ease;
+            cursor: help;
+        }
+
+        .byte-block:hover {
+            transform: translateY(-5px);
+            filter: brightness(1.2);
+            z-index: 20;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Estilo para lista del índice */
+        .index-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.2s;
+        }
+
+        .index-item:hover {
+            background: rgba(6, 182, 212, 0.1);
+            padding-left: 1.5rem;
+            cursor: pointer;
+        }
+
+        .index-number {
+            font-family: 'Orbitron', sans-serif;
+            color: #22d3ee;
+            font-weight: bold;
+        }
+
+        /* Control de visibilidad del Header Global */
+        body.on-cover header#global-header {
+            transform: translateY(-100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        header#global-header {
+            transition: all 0.5s ease;
+        }
+
+        /* Estilos específicos del video en portada (Placeholder) */
+        .video-placeholder {
+            border-radius: 1rem;
+            box-shadow: 0 0 30px rgba(6, 182, 212, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #64748b;
+        }
+
+        /* Ajustes scroll interno */
+        .scrollable-content {
+            overflow-y: auto;
+            max-height: 100%;
+            padding-right: 0.5rem;
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.5);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+
+        /* Estilo para el logo para asegurar visibilidad */
+        .header-logo {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+
+<body class="h-screen w-screen bg-slate-900 text-white">
+
+    <!-- HEADER FIJO (Visible en todas las slides excepto portada que tiene el suyo propio igual) -->
+    <header id="global-header"
+        class="fixed top-0 left-0 right-0 h-20 bg-slate-900/90 backdrop-blur border-b border-cyan-900/50 flex justify-between items-center px-8 z-50">
+
+        <!-- Izquierda: Título solicitado -->
+        <div class="flex flex-col justify-center">
+            <h1 class="text-xl font-bold tracking-wider text-slate-100">Redes de Comunicación Móvil</h1>
+        </div>
+
+        <!-- Centro: Indicador de página -->
+        <div class="flex gap-2 absolute left-1/2 transform -translate-x-1/2" id="slide-dots"></div>
+
+        <!-- Derecha: Logo solicitado -->
+        <div class="text-right flex items-center">
+            <img src="C:\Users\34605\Desktop\Universidad\Icono3.png" alt="Logo ULPGC EITE"
+                class="h-10 object-contain header-logo">
+        </div>
+    </header>
+
+    <!-- ================================================================================== -->
+    <!-- CONTENEDOR PRINCIPAL DE DIAPOSITIVAS -->
+    <!-- ================================================================================== -->
+    <main class="relative w-full h-full">
+
+        <!-- 1. PORTADA PERSONALIZADA -->
+        <section class="slide cover-slide active">
+            <!-- Header Específico de Portada (Coincide con el estilo solicitado) -->
+            <div class="absolute top-0 left-0 w-full p-8 flex justify-between items-center z-20">
+                <div class="text-2xl font-bold text-slate-200 tracking-wide">
+                    Redes de Comunicación Móvil
+                </div>
+                <div>
+                    <!-- Logo grande en portada -->
+                    <img src="Icono3.png" alt="Logo ULPGC EITE" class="h-14 object-contain header-logo">
+                </div>
+            </div>
+
+            <!-- Contenido Central Portada -->
+            <div class="w-full max-w-7xl mx-auto grid grid-cols-12 gap-12 items-center mt-16">
+
+                <!-- Columna Izquierda: Título y Autores -->
+                <div class="col-span-7 space-y-16 relative z-10">
+                    <div>
+                        <h1
+                            class="text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400 mb-4 leading-tight">
+                            NFC
+                        </h1>
+                        <h2 class="text-4xl text-cyan-400 font-light border-b-2 border-cyan-500/50 inline-block pb-2">
+                            (Near Field Communication)
+                        </h2>
+                    </div>
+
+                    <div class="glass-panel p-8 border-l-4 border-cyan-500 bg-slate-800/50">
+                        <p class="text-sm text-slate-400 uppercase tracking-widest mb-4 font-bold">Autores:</p>
+                        <ul class="space-y-3 text-xl">
+                            <li class="flex items-center gap-3">
+                                <i class="fa-solid fa-user text-cyan-500"></i> Angel Rivero Medina
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <i class="fa-solid fa-user text-blue-500"></i> Isaac Vera Galván
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Columna Derecha: GIF/Video -->
+                <div class="col-span-5 flex justify-center items-center relative">
+                    <div class="absolute inset-0 bg-cyan-500/10 blur-3xl rounded-full -z-10"></div>
+                    <!-- VIDEO REEMPLAZADO POR PLACEHOLDER ESTILIZADO -->
+                    <div class="video-placeholder">
+                        <i class="fa-solid fa-play-circle text-6xl text-cyan-500 mb-4 opacity-50"></i>
+                        <span class="text-sm font-mono text-cyan-300">VIDEO: SER FELIZ.MP4</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fondo Decorativo Sutil -->
+            <div class="absolute inset-0 overflow-hidden -z-10 opacity-30">
+                <div
+                    class="absolute bottom-[-20%] left-[-10%] w-[600px] h-[600px] border border-slate-700 rounded-full animate-[spin_60s_linear_infinite]">
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. ÍNDICE -->
+        <section class="slide">
+            <h2 class="text-4xl font-bold mb-8 text-cyan-400 border-l-4 border-cyan-500 pl-4">Índice de Contenidos</h2>
+
+            <div class="glass-panel p-8 w-full h-full overflow-y-auto">
+                <div class="grid grid-cols-2 gap-x-12 gap-y-2">
+                    <!-- Columna 1 -->
+                    <div>
+                        <div class="index-item" onclick="changeSlideTo(2)"><span
+                                class="index-number">01</span><span>Introducción a NFC</span></div>
+                        <div class="index-item" onclick="changeSlideTo(3)"><span
+                                class="index-number">02</span><span>Funcionamiento y arquitectura</span></div>
+                        <div class="index-item" onclick="changeSlideTo(4)"><span
+                                class="index-number">03</span><span>Modos de operación</span></div>
+                        <div class="index-item" onclick="changeSlideTo(5)"><span
+                                class="index-number">04</span><span>Estructura de tramas NFC</span></div>
+                        <div class="index-item" onclick="changeSlideTo(6)"><span
+                                class="index-number">05</span><span>Estándares y protocolos</span></div>
+                        <div class="index-item" onclick="changeSlideTo(7)"><span
+                                class="index-number">06</span><span>Seguridad en NFC</span></div>
+                    </div>
+                    <!-- Columna 2 -->
+                    <div>
+                        <div class="index-item" onclick="changeSlideTo(8)"><span
+                                class="index-number">07</span><span>Aplicaciones reales</span></div>
+                        <div class="index-item" onclick="changeSlideTo(9)"><span
+                                class="index-number">08</span><span>Ventajas y limitaciones</span></div>
+                        <div class="index-item" onclick="changeSlideTo(10)"><span
+                                class="index-number">09</span><span>Futuro de NFC</span></div>
+                        <div class="index-item" onclick="changeSlideTo(11)"><span
+                                class="index-number">10</span><span>Conclusión</span></div>
+                        <div class="index-item" onclick="changeSlideTo(12)"><span
+                                class="index-number">11</span><span>Bibliografía</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. INTRODUCCIÓN -->
+        <section class="slide">
+            <h2 class="text-3xl font-bold mb-6 text-white"><span class="text-cyan-400">1.</span> Introducción a NFC</h2>
+            <div class="grid grid-cols-2 gap-8 items-center h-full pb-8">
+                <div class="space-y-6 text-lg text-slate-300">
+                    <p>
+                        <strong>Near Field Communication (NFC)</strong> es un estándar de transmisión inalámbrica de
+                        corto alcance y alta frecuencia.
+                    </p>
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li><strong>Origen:</strong> Colaboración entre Philips y Sony (2002).</li>
+                        <li><strong>Base:</strong> Subconjunto de RFID (Identificación por Radiofrecuencia).</li>
+                        <li><strong>Frecuencia:</strong> Banda no licenciada de <strong>13.56 MHz</strong>.</li>
+                        <li><strong>Velocidad:</strong> Conexión casi instantánea (< 200 µs).</li>
+                    </ul>
+                    <div class="bg-cyan-900/30 p-4 rounded-lg border border-cyan-500/30">
+                        <h4 class="text-cyan-400 font-bold mb-2">Especificaciones Clave:</h4>
+                        <div class="grid grid-cols-2 gap-4 text-sm">
+                            <div><i class="fa-solid fa-gauge-high mr-2"></i>Tasas: 106 - 848 kbit/s</div>
+                            <div><i class="fa-solid fa-ruler-horizontal mr-2"></i>Alcance: < 4 cm (Teórico 20cm)</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-center">
+                        <i
+                            class="fa-solid fa-nfc-symbol text-[250px] text-cyan-600 opacity-80 drop-shadow-[0_0_35px_rgba(6,182,212,0.5)]"></i>
+                    </div>
+                </div>
+        </section>
+
+        <!-- 4. FUNCIONAMIENTO Y ARQUITECTURA (Simulador Interactivo) -->
+        <section class="slide">
+            <h2 class="text-3xl font-bold mb-4 text-white"><span class="text-cyan-400">2.</span> Funcionamiento y
+                Arquitectura</h2>
+
+            <!-- Aquí integramos el SIMULADOR VISUAL que te gustó -->
+            <div class="grid grid-cols-12 gap-6 h-full pb-4">
+                <div class="col-span-8 glass-panel rounded-2xl p-1 relative flex flex-col overflow-hidden neon-border">
+                    <div
+                        class="absolute top-4 left-4 z-20 bg-black/50 px-3 py-1 rounded text-xs text-cyan-400 font-mono">
+                        SIMULACIÓN: CAMPO MAGNÉTICO</div>
+                    <!-- Canvas de Campo -->
+                    <div class="flex-grow relative bg-slate-900 overflow-hidden flex items-center justify-center"
+                        id="simulation-container">
+                        <canvas id="fieldCanvas" class="absolute inset-0 w-full h-full opacity-40"></canvas>
+                        <!-- Dispositivos -->
+                        <div class="flex items-center justify-around w-full z-10 px-10">
+                            <!-- Iniciador -->
+                            <div class="flex flex-col items-center group" id="dev1-container">
+                                <div class="w-24 h-40 bg-slate-800 rounded-2xl border-2 border-slate-600 flex items-center justify-center relative shadow-2xl"
+                                    id="dev1-body">
+                                    <i class="fa-solid fa-mobile-screen text-4xl text-slate-500" id="dev1-icon"></i>
+                                </div>
+                                <p class="mt-2 text-sm font-bold text-cyan-400">INICIADOR</p>
+                            </div>
+                            <!-- Paquete -->
+                            <div class="relative w-24 h-10 flex items-center justify-center">
+                                <div id="flying-packet"
+                                    class="data-packet w-12 h-8 bg-cyan-600 rounded flex items-center justify-center text-[10px] font-bold shadow-[0_0_20px_rgba(6,182,212,0.6)] z-20">
+                                    FEM</div>
+                                <div class="h-0.5 w-full bg-slate-700 absolute top-1/2"></div>
+                            </div>
+                            <!-- Objetivo -->
+                            <div class="flex flex-col items-center" id="dev2-container">
+                                <div class="w-24 h-40 bg-slate-800 rounded-2xl border-2 border-slate-600 flex items-center justify-center relative shadow-2xl"
+                                    id="dev2-body">
+                                    <i class="fa-solid fa-tag text-4xl text-slate-500" id="dev2-icon"></i>
+                                </div>
+                                <p class="mt-2 text-sm font-bold text-green-400">OBJETIVO</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Control Simple -->
+                    <div class="bg-slate-900/80 p-4 border-t border-slate-700 flex justify-center">
+                        <button onclick="runSimulation()"
+                            class="px-6 py-2 bg-cyan-700 hover:bg-cyan-600 rounded-lg font-bold text-sm shadow-lg flex items-center gap-2 transition active:scale-95">
+                            <i class="fa-solid fa-play"></i> Simular Inducción
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Texto Explicativo -->
+                <div class="col-span-4 flex flex-col gap-4 overflow-y-auto">
+                    <div class="glass-panel p-4">
+                        <h3 class="font-bold text-cyan-400 mb-2">Fundamentos Físicos</h3>
+                        <p class="text-xs text-slate-300">
+                            Se basa en <strong>acoplamiento inductivo</strong> (Leyes de Faraday y Ampère-Maxwell). El
+                            iniciador genera un campo magnético que induce corriente en el objetivo para alimentarlo (si
+                            es pasivo).
+                        </p>
+                    </div>
+                    <div class="glass-panel p-4">
+                        <h3 class="font-bold text-purple-400 mb-2">Arquitectura Smartphone</h3>
+                        <ul class="text-xs text-slate-300 space-y-2">
+                            <li><strong>CLF:</strong> Contactless Front-End.</li>
+                            <li><strong>Antena RFID:</strong> Para captar/emitir 13.56 MHz.</li>
+                            <li><strong>Elemento Seguro (SE):</strong> Hardware crítico para guardar tarjetas de
+                                crédito.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. MODOS DE OPERACIÓN -->
+        <section class="slide">
+            <h2 class="text-3xl font-bold mb-8 text-white"><span class="text-cyan-400">3.</span> Modos de Operación</h2>
+            <div class="grid grid-cols-3 gap-6 h-full pb-12">
+                <!-- Modo 1 -->
+                <div
+                    class="glass-panel p-6 flex flex-col items-center text-center hover:bg-slate-800/80 transition transform hover:-translate-y-2">
+                    <div
+                        class="w-16 h-16 rounded-full bg-cyan-900/50 flex items-center justify-center mb-4 text-cyan-400 text-2xl">
+                        <i class="fa-solid fa-eye"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Lectura / Escritura</h3>
+                    <p class="text-sm text-slate-400">El móvil activo lee o escribe en etiquetas pasivas (Tags).</p>
+                    <div class="mt-auto pt-4 text-xs text-cyan-500 font-mono">Ej: Smart Posters (NDEF)</div>
+                </div>
+                <!-- Modo 2 -->
+                <div
+                    class="glass-panel p-6 flex flex-col items-center text-center hover:bg-slate-800/80 transition transform hover:-translate-y-2">
+                    <div
+                        class="w-16 h-16 rounded-full bg-indigo-900/50 flex items-center justify-center mb-4 text-indigo-400 text-2xl">
+                        <i class="fa-solid fa-right-left"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Peer-to-Peer (P2P)</h3>
+                    <p class="text-sm text-slate-400">Dos dispositivos activos intercambian datos bidireccionalmente.
+                    </p>
+                    <div class="mt-auto pt-4 text-xs text-indigo-500 font-mono">Ej: Handover Wifi/BT (LLCP)</div>
+                </div>
+                <!-- Modo 3 -->
+                <div
+                    class="glass-panel p-6 flex flex-col items-center text-center hover:bg-slate-800/80 transition transform hover:-translate-y-2">
+                    <div
+                        class="w-16 h-16 rounded-full bg-emerald-900/50 flex items-center justify-center mb-4 text-emerald-400 text-2xl">
+                        <i class="fa-solid fa-credit-card"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Emulación de Tarjeta</h3>
+                    <p class="text-sm text-slate-400">El móvil se comporta como una tarjeta inteligente (ISO 14443).</p>
+                    <div class="mt-auto pt-4 text-xs text-emerald-500 font-mono">Ej: Pagos (Apple Pay)</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. ESTRUCTURA DE TRAMAS (Inspector Interactivo) -->
+        <section class="slide">
+            <h2 class="text-3xl font-bold mb-4 text-white"><span class="text-cyan-400">4.</span> Estructura de Tramas
+                NFC</h2>
+
+            <div class="flex flex-col h-full justify-center max-w-5xl mx-auto w-full pb-8">
+                <div class="flex gap-8 mb-8">
+                    <div class="glass-panel p-4 flex-1">
+                        <h4 class="font-bold text-cyan-400 border-b border-white/10 pb-2 mb-2">Codificación</h4>
+                        <ul class="text-sm text-slate-300 space-y-1">
+                            <li><strong>106 kBaud:</strong> Miller Modificada (ASK 100%)</li>
+                            <li><strong>>106 kBaud:</strong> Manchester (ASK 10%)</li>
+                        </ul>
+                    </div>
+                    <div class="glass-panel p-4 flex-1">
+                        <h4 class="font-bold text-purple-400 border-b border-white/10 pb-2 mb-2">Protocolo Lógico</h4>
+                        <p class="text-sm text-slate-300">Basado en <strong>APDU</strong> (Application Protocol Data
+                            Unit).</p>
+                    </div>
+                </div>
+
+                <!-- Inspector APDU -->
+                <p class="text-center text-slate-500 text-sm mb-4">Mueve el cursor sobre los bloques:</p>
+                <div class="flex gap-1 mb-2">
+                    <div class="h-20 w-1/6 bg-cyan-900/40 border border-cyan-500 flex items-center justify-center byte-block"
+                        onmouseenter="setInfo('CLA')" onmouseleave="clearInfo()">CLA</div>
+                    <div class="h-20 w-1/6 bg-cyan-900/40 border border-cyan-500 flex items-center justify-center byte-block"
+                        onmouseenter="setInfo('INS')" onmouseleave="clearInfo()">INS</div>
+                    <div class="h-20 w-1/6 bg-cyan-900/40 border border-cyan-500 flex items-center justify-center byte-block"
+                        onmouseenter="setInfo('P1P2')" onmouseleave="clearInfo()">P1/P2</div>
+                    <div class="h-20 w-2/6 bg-slate-800/60 border border-slate-500 border-dashed flex items-center justify-center byte-block"
+                        onmouseenter="setInfo('Data')" onmouseleave="clearInfo()">PAYLOAD (DATA)</div>
+                    <div class="h-20 w-1/6 bg-green-900/40 border border-green-500 flex items-center justify-center byte-block"
+                        onmouseenter="setInfo('SW')" onmouseleave="clearInfo()">SW1/SW2</div>
+                </div>
+
+                <!-- Info Box -->
+                <div class="bg-slate-800 p-4 border-l-4 border-slate-500 min-h-[100px] rounded-r transition-colors"
+                    id="apdu-box">
+                    <h3 class="font-bold text-white" id="apdu-title">Estructura APDU</h3>
+                    <p class="text-sm text-slate-400" id="apdu-desc">Pasa el ratón por los bloques de arriba para ver su
+                        función.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. ESTÁNDARES Y PROTOCOLOS -->
+        <section class="slide">
+            <h2 class="text-3xl font-bold mb-8 text-white"><span class="text-cyan-400">5.</span> Estándares y Protocolos
+            </h2>
+            <div class="grid grid-cols-2 gap-8 h-full pb-12">
+                <div class="glass-panel p-8 space-y-4">
+                    <h3 class="text-xl font-bold text-cyan-400"><i class="fa-solid fa-book mr-2"></i>Protocolo Digital
+                    </h3>
+                    <p class="text-slate-300">NFC armoniza estándares RFID existentes:</p>
+                    <ul class="list-disc pl-5 space-y-2 text-slate-400">
+                        <li><strong>ISO/IEC 14443:</strong> Tarjetas de proximidad y pagos.</li>
+                        <li><strong>ISO/IEC 18092 (NFCIP-1):</strong> Definición de P2P.</li>
+                        <li><strong>JIS X 6319-4:</strong> Soporte para FeliCa (popular en Asia).</li>
+                    </ul>
+                </div>
+                <div class="glass-panel p-8 space-y-4">
+                    <h3 class="text-xl font-bold text-purple-400"><i class="fa-solid fa-file-code mr-2"></i>Formato NDEF
+                    </h3>
+                    <p class="text-slate-300"><strong>NFC Data Exchange Format</strong></p>
+                    <p class="text-slate-400 text-sm">
+                        Es el "idioma" universal. Encapsula los datos en mensajes con registros (Records). Asegura que
+                        si lees un Tag con un Samsung o un iPhone, ambos entiendan que es una URL o un contacto.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 8. SEGURIDAD -->
+        <section class="slide">
+            <h2 class="text-3xl font-bold mb-8 text-white"><span class="text-cyan-400">6.</span> Seguridad en NFC</h2>
+            <div class="grid grid-cols-2 gap-12 items-center h-full pb-12">
+
+                <div class="space-y-6">
+                    <div class="glass-panel p-6 border-l-4 border-red-500">
+                        <h3 class="text-red-400 font-bold mb-2"><i class="fa-solid fa-bug mr-2"></i>Vectores de Ataque
+                        </h3>
+                        <ul class="text-sm text-slate-300 space-y-2">
+                            <li><strong>Eavesdropping:</strong> Escucha con antenas potentes.</li>
+                            <li><strong>Corrupción de datos:</strong> DoS interfiriendo señal.</li>
+                            <li><strong>Relay Attack:</strong> Retransmisión de señal a larga distancia (crítico en
+                                pagos).</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="glass-panel p-6 border-l-4 border-green-500">
+                        <h3 class="text-green-400 font-bold mb-2"><i
+                                class="fa-solid fa-shield-halved mr-2"></i>Protección</h3>
+                        <ul class="text-sm text-slate-300 space-y-2">
+                            <li><strong>Elemento Seguro (SE):</strong> Chip hardware tamper-proof.</li>
+                            <li><strong>HCE (Host Card Emulation):</strong> Tokenización en nube (Android).</li>
+                            <li><strong>Canal Cifrado:</strong> SSL entre tarjeta y lector.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 9. APLICACIONES REALES -->
+        <section class="slide">
+            <h2 class="text-3xl font-bold mb-6 text-white"><span class="text-cyan-400">7.</span> Aplicaciones Reales
+            </h2>
+            <div class="grid grid-cols-2 grid-rows-2 gap-6 h-full pb-8">
+                <div class="glass-panel p-6 flex gap-4 items-center hover:bg-slate-800/80 transition">
+                    <div class="text-4xl text-yellow-400"><i class="fa-solid fa-wallet"></i></div>
+                    <div>
+                        <h3 class="font-bold">Pagos Móviles</h3>
+                        <p class="text-sm text-slate-400">Apple Pay, Google Pay. Sustitución de tarjetas físicas.</p>
+                    </div>
+                </div>
+                <div class="glass-panel p-6 flex gap-4 items-center hover:bg-slate-800/80 transition">
+                    <div class="text-4xl text-blue-400"><i class="fa-solid fa-id-card"></i></div>
+                    <div>
+                        <h3 class="font-bold">Control de Acceso</h3>
+                        <p class="text-sm text-slate-400">Digital Key para coches, hoteles y oficinas.</p>
+                    </div>
+                </div>
+                <div class="glass-panel p-6 flex gap-4 items-center hover:bg-slate-800/80 transition">
+                    <div class="text-4xl text-purple-400"><i class="fa-brands fa-bluetooth-b"></i></div>
+                    <div>
+                        <h3 class="font-bold">Connection Handover</h3>
+                        <p class="text-sm text-slate-400">Emparejamiento instantáneo para Bluetooth o Wi-Fi.</p>
+                    </div>
+                </div>
+                <div class="glass-panel p-6 flex gap-4 items-center hover:bg-slate-800/80 transition">
+                    <div class="text-4xl text-pink-400"><i class="fa-solid fa-bullhorn"></i></div>
+                    <div>
+                        <h3 class="font-bold">Marketing</h3>
+                        <p class="text-sm text-slate-400">Smart Posters: Tocar para abrir webs o cupones.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 10. VENTAJAS Y LIMITACIONES -->
+        <section class="slide">
+            <h2 class="text-3xl font-bold mb-8 text-white"><span class="text-cyan-400">8.</span> Ventajas y Limitaciones
+            </h2>
+            <div class="grid grid-cols-2 gap-8 h-full pb-12">
+                <div class="glass-panel p-8 bg-green-900/10 border-green-500/30">
+                    <h3 class="text-2xl font-bold text-green-400 mb-6 text-center"><i
+                            class="fa-solid fa-thumbs-up mr-2"></i>Ventajas</h3>
+                    <ul class="space-y-4 text-lg text-slate-300">
+                        <li><i class="fa-solid fa-check text-green-500 mr-2"></i>Configuración instantánea (<
+                                0.1s).</li>
+                        <li><i class="fa-solid fa-check text-green-500 mr-2"></i>Tags pasivos (sin batería).</li>
+                        <li><i class="fa-solid fa-check text-green-500 mr-2"></i>Seguridad por proximidad física.</li>
+                        <li><i class="fa-solid fa-check text-green-500 mr-2"></i>No requiere línea de visión (vs QR).
+                        </li>
+                    </ul>
+                </div>
+                <div class="glass-panel p-8 bg-red-900/10 border-red-500/30">
+                    <h3 class="text-2xl font-bold text-red-400 mb-6 text-center"><i
+                            class="fa-solid fa-thumbs-down mr-2"></i>Limitaciones</h3>
+                    <ul class="space-y-4 text-lg text-slate-300">
+                        <li><i class="fa-solid fa-xmark text-red-500 mr-2"></i>Baja tasa de datos (Max 424 kbps).</li>
+                        <li><i class="fa-solid fa-xmark text-red-500 mr-2"></i>No apto para archivos pesados.</li>
+                        <li><i class="fa-solid fa-xmark text-red-500 mr-2"></i>Alcance extremadamente corto.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 11. FUTURO -->
+        <section class="slide">
+            <h2 class="text-3xl font-bold mb-8 text-white"><span class="text-cyan-400">9.</span> Futuro (Roadmap 2028)
+            </h2>
+            <div class="space-y-4 h-full pb-12 scrollable-content">
+
+                <div class="glass-panel p-4 flex gap-4 items-center">
+                    <div
+                        class="w-12 h-12 rounded-full bg-yellow-500/20 text-yellow-400 flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg">Carga Inalámbrica (WLC)</h4>
+                        <p class="text-sm text-slate-400">Cargar pequeños dispositivos IoT (hasta 1-3W) con la misma
+                            antena.</p>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-4 flex gap-4 items-center">
+                    <div
+                        class="w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-expand"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg">Mayor Alcance</h4>
+                        <p class="text-sm text-slate-400">Aumentar rango 4x-6x para mejorar fiabilidad del "toque".</p>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-4 flex gap-4 items-center">
+                    <div
+                        class="w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-cash-register"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg">SoftPOS</h4>
+                        <p class="text-sm text-slate-400">Cualquier móvil como TPV de cobro sin hardware extra.</p>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-4 flex gap-4 items-center">
+                    <div
+                        class="w-12 h-12 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-recycle"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg">Pasaporte Digital (DPP)</h4>
+                        <p class="text-sm text-slate-400">Trazabilidad y reciclaje de productos por normativa.</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 12. CONCLUSIÓN -->
+        <section class="slide items-center justify-center text-center">
+            <div class="max-w-4xl space-y-8">
+                <h2
+                    class="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-green-400">
+                    10. Conclusión</h2>
+                <div class="glass-panel p-10">
+                    <p class="text-2xl text-slate-200 leading-relaxed font-light">
+                        NFC es una tecnología <strong class="text-cyan-400">robusta y segura</strong> que va más allá de
+                        los pagos. Con innovaciones como la <strong class="text-yellow-400">carga inalámbrica</strong> y
+                        el pasaporte digital, se consolida como un habilitador clave para el futuro del <strong
+                            class="text-purple-400">Internet de las Cosas (IoT)</strong>.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 13. BIBLIOGRAFÍA -->
+        <section class="slide">
+            <h2 class="text-3xl font-bold mb-8 text-white"><span class="text-cyan-400">11.</span> Bibliografía</h2>
+            <div class="glass-panel p-8 w-full">
+                <ul class="space-y-6 text-lg text-slate-300 list-disc pl-6">
+                    <li>
+                        <strong>NFC Forum.</strong> (2024). <em>NFC Technology Overview & Roadmap.</em> Recuperado de
+                        nfc-forum.org
+                    </li>
+                    <li>
+                        <strong>ISO/IEC.</strong> <em>Standard 14443: Identification cards — Contactless integrated
+                            circuit cards.</em>
+                    </li>
+                    <li>
+                        <strong>ISO/IEC.</strong> <em>Standard 18092: Information technology — Telecommunications and
+                            information exchange between systems — Near Field Communication.</em>
+                    </li>
+                    <li>
+                        <strong>Coskun, V., Ok, K., & Ozdenizci, B.</strong> (2013). <em>Professional NFC Application
+                            Development for Android.</em> Wrox.
+                    </li>
+                    <li>
+                        <strong>Haselsteiner, E., & Breitfuß, K.</strong> (2006). <em>Security in near field
+                            communication (NFC).</em> Workshop on RFID Security.
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- BOTONES DE NAVEGACIÓN -->
+    <div class="fixed bottom-8 right-8 flex gap-4 z-50">
+        <button onclick="changeSlide(-1)"
+            class="w-12 h-12 rounded-full bg-slate-800 border border-slate-600 hover:bg-cyan-700 hover:border-cyan-500 text-white transition flex items-center justify-center shadow-lg active:scale-95">
+            <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <button onclick="changeSlide(1)"
+            class="w-12 h-12 rounded-full bg-slate-800 border border-slate-600 hover:bg-cyan-700 hover:border-cyan-500 text-white transition flex items-center justify-center shadow-lg active:scale-95">
+            <i class="fa-solid fa-chevron-right"></i>
+        </button>
+    </div>
+
+    <script>
+        // --- LÓGICA DE PRESENTACIÓN ---
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const dotsContainer = document.getElementById('slide-dots');
+
+        // Crear indicadores (puntos)
+        slides.forEach((_, i) => {
+            const dot = document.createElement('div');
+            dot.className = `w-2 h-2 rounded-full transition-all duration-300 cursor-pointer hover:bg-cyan-600 ${i === 0 ? 'bg-cyan-400 w-4' : 'bg-slate-600'}`;
+            // Permitir clic en los puntos
+            dot.onclick = () => changeSlideTo(i);
+            dotsContainer.appendChild(dot);
+        });
+
+        const dots = dotsContainer.children;
+
+        function updateDisplay() {
+            // Manejo del Header Global
+            if (currentSlide === 0) {
+                document.body.classList.add('on-cover');
+            } else {
+                document.body.classList.remove('on-cover');
+            }
+
+            slides.forEach((slide, index) => {
+                if (index === currentSlide) {
+                    slide.classList.add('active');
+                    slide.style.opacity = '1';
+                    slide.style.transform = 'scale(1)';
+                } else {
+                    slide.classList.remove('active');
+                    slide.style.opacity = '0';
+                    slide.style.transform = index < currentSlide ? 'scale(0.9) translateX(-50px)' : 'scale(1.1) translateX(50px)';
+                }
+            });
+
+            // Actualizar puntos
+            Array.from(dots).forEach((dot, i) => {
+                dot.className = i === currentSlide
+                    ? 'w-4 h-2 rounded-full bg-cyan-400 transition-all duration-300 cursor-pointer'
+                    : 'w-2 h-2 rounded-full bg-slate-600 transition-all duration-300 cursor-pointer hover:bg-cyan-600';
+            });
+
+            // Iniciar animaciones específicas si estamos en la diapositiva correcta
+            // Diapositiva 3 es índice 3 (empezando en 0 es la 4ta slide) -> Funcionamiento
+            if (currentSlide === 3) {
+                setTimeout(resizeFieldCanvas, 100);
+            }
+        }
+
+        function changeSlide(dir) {
+            const next = currentSlide + dir;
+            if (next >= 0 && next < slides.length) {
+                currentSlide = next;
+                updateDisplay();
+            }
+        }
+
+        function changeSlideTo(index) {
+            if (index >= 0 && index < slides.length) {
+                currentSlide = index;
+                updateDisplay();
+            }
+        }
+
+        // Teclado
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') changeSlide(1);
+            if (e.key === 'ArrowLeft') changeSlide(-1);
+        });
+
+        // --- LÓGICA SIMULADOR (DIAPOSITIVA 4 / Índice 3) ---
+        function runSimulation() {
+            const packet = document.getElementById('flying-packet');
+            const dev1 = document.getElementById('dev1-body');
+            const dev2 = document.getElementById('dev2-body');
+
+            // Reset
+            dev1.classList.remove('neon-border'); dev2.classList.remove('neon-border');
+
+            // Active State
+            dev1.classList.add('neon-border');
+
+            // Animacion paquete
+            packet.style.transition = 'none';
+            packet.style.left = '25%';
+            packet.style.opacity = '1';
+
+            // Forzar reflow
+            packet.offsetHeight;
+
+            setTimeout(() => {
+                packet.style.transition = 'left 1s cubic-bezier(0.4, 0, 0.2, 1)';
+                packet.style.left = '65%';
+            }, 50);
+
+            setTimeout(() => {
+                dev2.classList.add('neon-border');
+                packet.style.opacity = '0';
+            }, 1050);
+        }
+
+        // --- LÓGICA INSPECTOR APDU (DIAPOSITIVA 6 / Índice 5) ---
+        const apduInfo = {
+            'CLA': { t: 'Class Byte', d: 'Define la clase de instrucción. (0x00 Estándar, 0x80 Propietario).', c: 'border-cyan-500' },
+            'INS': { t: 'Instruction Byte', d: 'Código de la operación. (Ej: 0xA4 = SELECT FILE).', c: 'border-cyan-500' },
+            'P1P2': { t: 'Parameters', d: 'Parámetros de la instrucción (ej. offset de memoria).', c: 'border-cyan-500' },
+            'Data': { t: 'Payload / Data', d: 'Información real (NDEF, claves, etc). Variable longitud (Lc).', c: 'border-slate-400' },
+            'SW': { t: 'Status Word', d: 'Estado final. 0x9000 = OK. Cualquier otra cosa = Error.', c: 'border-green-500' }
+        };
+
+        function setInfo(key) {
+            const data = apduInfo[key];
+            const box = document.getElementById('apdu-box');
+            document.getElementById('apdu-title').innerText = data.t;
+            document.getElementById('apdu-desc').innerText = data.d;
+            box.className = `bg-slate-800 p-4 border-l-4 min-h-[100px] rounded-r transition-colors ${data.c}`;
+        }
+
+        function clearInfo() {
+            document.getElementById('apdu-title').innerText = "Estructura APDU";
+            document.getElementById('apdu-desc').innerText = "Pasa el ratón por los bloques de arriba para ver su función.";
+            document.getElementById('apdu-box').className = "bg-slate-800 p-4 border-l-4 border-slate-500 min-h-[100px] rounded-r transition-colors";
+        }
+
+        // --- FONDO ANIMADO CANVAS ---
+        const canvas = document.getElementById('fieldCanvas');
+        const ctx = canvas ? canvas.getContext('2d') : null;
+        let waves = [];
+
+        function resizeFieldCanvas() {
+            const parent = document.getElementById('simulation-container');
+            if (parent && canvas) {
+                canvas.width = parent.clientWidth;
+                canvas.height = parent.clientHeight;
+            }
+        }
+        window.addEventListener('resize', resizeFieldCanvas);
+
+        function animateField() {
+            if (!ctx || currentSlide !== 3) {
+                requestAnimationFrame(animateField);
+                return;
+            }
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // Generar ondas aleatorias
+            if (Math.random() > 0.95) waves.push({ x: canvas.width * 0.3, y: canvas.height / 2, r: 10, op: 1 });
+
+            ctx.lineWidth = 2;
+            waves.forEach((w, i) => {
+                w.r += 2; w.op -= 0.02;
+                ctx.beginPath();
+                ctx.arc(w.x, w.y, w.r, 0, Math.PI * 2);
+                ctx.strokeStyle = `rgba(6, 182, 212, ${w.op})`;
+                ctx.stroke();
+                if (w.op <= 0) waves.splice(i, 1);
+            });
+            requestAnimationFrame(animateField);
+        }
+
+        // Init
+        window.onload = function () {
+            updateDisplay();
+            if (canvas) {
+                resizeFieldCanvas();
+                animateField();
+            }
+        };
+
+    </script>
+</body>
+
+</html>
