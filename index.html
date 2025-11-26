@@ -4,172 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NFCccc - Redes de Comunicaciones Móviles</title>
+    <title>NFC - Redes de Comunicaciones Móviles</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Orbitron:wght@400;700&display=swap');
-
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #0f172a;
-            color: #e2e8f0;
-            overflow: hidden;
-            /* Evita barras de scroll en modo presentación */
-        }
-
-        .digital-font {
-            font-family: 'Orbitron', sans-serif;
-        }
-
-        /* --- CLASES DE TRANSICIÓN DE DIAPOSITIVAS --- */
-        .slide {
-            position: absolute;
-            inset: 0;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.5s ease-in-out, transform 0.5s ease;
-            transform: scale(0.95);
-            display: flex;
-            flex-direction: column;
-            padding: 2rem 4rem;
-            padding-top: 6rem;
-            /* Espacio para el header fijo */
-            overflow: hidden;
-            /* Asegura que el contenido no desborde */
-        }
-
-        /* Clase especial para la portada (Layout libre) */
-        .slide.cover-slide {
-            padding: 3rem 4rem;
-            justify-content: center;
-        }
-
-        .slide.active {
-            opacity: 1;
-            pointer-events: all;
-            transform: scale(1);
-            z-index: 10;
-        }
-
-        /* --- ESTILOS VISUALES (Paneles de cristal, bordes neón) --- */
-        .glass-panel {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 1rem;
-        }
-
-        .neon-border {
-            box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
-            border-color: rgba(6, 182, 212, 0.5);
-        }
-
-        /* Animaciones para el simulador */
-        .data-packet {
-            position: absolute;
-            transition: left 1s linear, opacity 0.2s;
-            opacity: 0;
-        }
-
-        /* Estilos para el inspector de tramas */
-        .byte-block {
-            transition: all 0.2s ease;
-            cursor: help;
-        }
-
-        .byte-block:hover {
-            transform: translateY(-5px);
-            filter: brightness(1.2);
-            z-index: 20;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
-        }
-
-        /* Estilo para lista del índice */
-        .index-item {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 0.75rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.2s;
-        }
-
-        .index-item:hover {
-            background: rgba(6, 182, 212, 0.1);
-            padding-left: 1.5rem;
-            cursor: pointer;
-        }
-
-        .index-number {
-            font-family: 'Orbitron', sans-serif;
-            color: #22d3ee;
-            font-weight: bold;
-        }
-
-        /* Control de visibilidad del Header Global */
-        body.on-cover header#global-header {
-            transform: translateY(-100%);
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        header#global-header {
-            transition: all 0.5s ease;
-        }
-
-        /* Estilos específicos del video en portada (Placeholder) */
-        .video-placeholder {
-            border-radius: 1rem;
-            box-shadow: 0 0 30px rgba(6, 182, 212, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            width: 100%;
-            aspect-ratio: 16/9;
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: #64748b;
-        }
-
-        /* Ajustes scroll interno */
-        .scrollable-content {
-            overflow-y: auto;
-            max-height: 100%;
-            padding-right: 0.5rem;
-        }
-
-        /* Scrollbar styling */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: rgba(15, 23, 42, 0.5);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #334155;
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #475569;
-        }
-
-        /* Estilo para el logo para asegurar visibilidad */
-        .header-logo {
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 4px 8px;
-            border-radius: 6px;
-        }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body class="h-screen w-screen bg-slate-900 text-white">
 
-    <!-- HEADER FIJO (Visible en todas las slides excepto portada que tiene el suyo propio igual) -->
     <header id="global-header"
         class="fixed top-0 left-0 right-0 h-20 bg-slate-900/90 backdrop-blur border-b border-cyan-900/50 flex justify-between items-center px-8 z-50">
 
@@ -183,7 +25,7 @@
 
         <!-- Derecha: Logo solicitado -->
         <div class="text-right flex items-center">
-            <img src="images\Icono3.png" alt="Logo ULPGC EITE" class="h-10 object-contain header-logo">
+            <img src="images\Icono3.png" alt="Logo ULPGC EITE" class="h-14 object-contain header-logo">
         </div>
     </header>
 
@@ -266,7 +108,8 @@
                         <div class="index-item" onclick="changeSlideTo(3)"><span
                                 class="index-number">02</span><span>Funcionamiento y arquitectura</span></div>
                         <div class="index-item" onclick="changeSlideTo(4)"><span
-                                class="index-number">03</span><span>Modos de operación</span></div>
+                                class="index-number">03</span><span>Modos
+                                de operación</span></div>
                         <div class="index-item" onclick="changeSlideTo(5)"><span
                                 class="index-number">04</span><span>Estructura de tramas NFC</span></div>
                         <div class="index-item" onclick="changeSlideTo(6)"><span
@@ -281,7 +124,8 @@
                         <div class="index-item" onclick="changeSlideTo(9)"><span
                                 class="index-number">08</span><span>Ventajas y limitaciones</span></div>
                         <div class="index-item" onclick="changeSlideTo(10)"><span
-                                class="index-number">09</span><span>Futuro de NFC</span></div>
+                                class="index-number">09</span><span>Futuro
+                                de NFC</span></div>
                         <div class="index-item" onclick="changeSlideTo(11)"><span
                                 class="index-number">10</span><span>Conclusión</span></div>
                         <div class="index-item" onclick="changeSlideTo(12)"><span
@@ -530,7 +374,8 @@
                 <div class="space-y-6">
                     <div class="glass-panel p-6 border-l-4 border-green-500">
                         <h3 class="text-green-400 font-bold mb-2"><i
-                                class="fa-solid fa-shield-halved mr-2"></i>Protección</h3>
+                                class="fa-solid fa-shield-halved mr-2"></i>Protección
+                        </h3>
                         <ul class="text-sm text-slate-300 space-y-2">
                             <li><strong>Elemento Seguro (SE):</strong> Chip hardware tamper-proof.</li>
                             <li><strong>HCE (Host Card Emulation):</strong> Tokenización en nube (Android).</li>
@@ -720,178 +565,7 @@
         </button>
     </div>
 
-    <script>
-        // --- LÓGICA DE PRESENTACIÓN ---
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.slide');
-        const dotsContainer = document.getElementById('slide-dots');
-
-        // Crear indicadores (puntos)
-        slides.forEach((_, i) => {
-            const dot = document.createElement('div');
-            dot.className = `w-2 h-2 rounded-full transition-all duration-300 cursor-pointer hover:bg-cyan-600 ${i === 0 ? 'bg-cyan-400 w-4' : 'bg-slate-600'}`;
-            // Permitir clic en los puntos
-            dot.onclick = () => changeSlideTo(i);
-            dotsContainer.appendChild(dot);
-        });
-
-        const dots = dotsContainer.children;
-
-        function updateDisplay() {
-            // Manejo del Header Global
-            if (currentSlide === 0) {
-                document.body.classList.add('on-cover');
-            } else {
-                document.body.classList.remove('on-cover');
-            }
-
-            slides.forEach((slide, index) => {
-                if (index === currentSlide) {
-                    slide.classList.add('active');
-                    slide.style.opacity = '1';
-                    slide.style.transform = 'scale(1)';
-                } else {
-                    slide.classList.remove('active');
-                    slide.style.opacity = '0';
-                    slide.style.transform = index < currentSlide ? 'scale(0.9) translateX(-50px)' : 'scale(1.1) translateX(50px)';
-                }
-            });
-
-            // Actualizar puntos
-            Array.from(dots).forEach((dot, i) => {
-                dot.className = i === currentSlide
-                    ? 'w-4 h-2 rounded-full bg-cyan-400 transition-all duration-300 cursor-pointer'
-                    : 'w-2 h-2 rounded-full bg-slate-600 transition-all duration-300 cursor-pointer hover:bg-cyan-600';
-            });
-
-            // Iniciar animaciones específicas si estamos en la diapositiva correcta
-            // Diapositiva 3 es índice 3 (empezando en 0 es la 4ta slide) -> Funcionamiento
-            if (currentSlide === 3) {
-                setTimeout(resizeFieldCanvas, 100);
-            }
-        }
-
-        function changeSlide(dir) {
-            const next = currentSlide + dir;
-            if (next >= 0 && next < slides.length) {
-                currentSlide = next;
-                updateDisplay();
-            }
-        }
-
-        function changeSlideTo(index) {
-            if (index >= 0 && index < slides.length) {
-                currentSlide = index;
-                updateDisplay();
-            }
-        }
-
-        // Teclado
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight') changeSlide(1);
-            if (e.key === 'ArrowLeft') changeSlide(-1);
-        });
-
-        // --- LÓGICA SIMULADOR (DIAPOSITIVA 4 / Índice 3) ---
-        function runSimulation() {
-            const packet = document.getElementById('flying-packet');
-            const dev1 = document.getElementById('dev1-body');
-            const dev2 = document.getElementById('dev2-body');
-
-            // Reset
-            dev1.classList.remove('neon-border'); dev2.classList.remove('neon-border');
-
-            // Active State
-            dev1.classList.add('neon-border');
-
-            // Animacion paquete
-            packet.style.transition = 'none';
-            packet.style.left = '25%';
-            packet.style.opacity = '1';
-
-            // Forzar reflow
-            packet.offsetHeight;
-
-            setTimeout(() => {
-                packet.style.transition = 'left 1s cubic-bezier(0.4, 0, 0.2, 1)';
-                packet.style.left = '65%';
-            }, 50);
-
-            setTimeout(() => {
-                dev2.classList.add('neon-border');
-                packet.style.opacity = '0';
-            }, 1050);
-        }
-
-        // --- LÓGICA INSPECTOR APDU (DIAPOSITIVA 6 / Índice 5) ---
-        const apduInfo = {
-            'CLA': { t: 'Class Byte', d: 'Define la clase de instrucción. (0x00 Estándar, 0x80 Propietario).', c: 'border-cyan-500' },
-            'INS': { t: 'Instruction Byte', d: 'Código de la operación. (Ej: 0xA4 = SELECT FILE).', c: 'border-cyan-500' },
-            'P1P2': { t: 'Parameters', d: 'Parámetros de la instrucción (ej. offset de memoria).', c: 'border-cyan-500' },
-            'Data': { t: 'Payload / Data', d: 'Información real (NDEF, claves, etc). Variable longitud (Lc).', c: 'border-slate-400' },
-            'SW': { t: 'Status Word', d: 'Estado final. 0x9000 = OK. Cualquier otra cosa = Error.', c: 'border-green-500' }
-        };
-
-        function setInfo(key) {
-            const data = apduInfo[key];
-            const box = document.getElementById('apdu-box');
-            document.getElementById('apdu-title').innerText = data.t;
-            document.getElementById('apdu-desc').innerText = data.d;
-            box.className = `bg-slate-800 p-4 border-l-4 min-h-[100px] rounded-r transition-colors ${data.c}`;
-        }
-
-        function clearInfo() {
-            document.getElementById('apdu-title').innerText = "Estructura APDU";
-            document.getElementById('apdu-desc').innerText = "Pasa el ratón por los bloques de arriba para ver su función.";
-            document.getElementById('apdu-box').className = "bg-slate-800 p-4 border-l-4 border-slate-500 min-h-[100px] rounded-r transition-colors";
-        }
-
-        // --- FONDO ANIMADO CANVAS ---
-        const canvas = document.getElementById('fieldCanvas');
-        const ctx = canvas ? canvas.getContext('2d') : null;
-        let waves = [];
-
-        function resizeFieldCanvas() {
-            const parent = document.getElementById('simulation-container');
-            if (parent && canvas) {
-                canvas.width = parent.clientWidth;
-                canvas.height = parent.clientHeight;
-            }
-        }
-        window.addEventListener('resize', resizeFieldCanvas);
-
-        function animateField() {
-            if (!ctx || currentSlide !== 3) {
-                requestAnimationFrame(animateField);
-                return;
-            }
-
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            // Generar ondas aleatorias
-            if (Math.random() > 0.95) waves.push({ x: canvas.width * 0.3, y: canvas.height / 2, r: 10, op: 1 });
-
-            ctx.lineWidth = 2;
-            waves.forEach((w, i) => {
-                w.r += 2; w.op -= 0.02;
-                ctx.beginPath();
-                ctx.arc(w.x, w.y, w.r, 0, Math.PI * 2);
-                ctx.strokeStyle = `rgba(6, 182, 212, ${w.op})`;
-                ctx.stroke();
-                if (w.op <= 0) waves.splice(i, 1);
-            });
-            requestAnimationFrame(animateField);
-        }
-
-        // Init
-        window.onload = function () {
-            updateDisplay();
-            if (canvas) {
-                resizeFieldCanvas();
-                animateField();
-            }
-        };
-
-    </script>
+    <script src="js/script.js"></script>
 </body>
 
 </html>

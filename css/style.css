@@ -1,0 +1,156 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Orbitron:wght@400;700&display=swap');
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #0f172a;
+    color: #e2e8f0;
+    overflow: hidden;
+    /* Evita barras de scroll en modo presentación */
+}
+
+.digital-font {
+    font-family: 'Orbitron', sans-serif;
+}
+
+/* --- CLASES DE TRANSICIÓN DE DIAPOSITIVAS --- */
+.slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease;
+    transform: scale(0.95);
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 4rem;
+    padding-top: 6rem;
+    /* Espacio para el header fijo */
+    overflow: hidden;
+    /* Asegura que el contenido no desborde */
+}
+
+/* Clase especial para la portada (Layout libre) */
+.slide.cover-slide {
+    padding: 3rem 4rem;
+    justify-content: center;
+}
+
+.slide.active {
+    opacity: 1;
+    pointer-events: all;
+    transform: scale(1);
+    z-index: 10;
+}
+
+/* --- ESTILOS VISUALES (Paneles de cristal, bordes neón) --- */
+.glass-panel {
+    background: rgba(30, 41, 59, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1rem;
+}
+
+.neon-border {
+    box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
+    border-color: rgba(6, 182, 212, 0.5);
+}
+
+/* Animaciones para el simulador */
+.data-packet {
+    position: absolute;
+    transition: left 1s linear, opacity 0.2s;
+    opacity: 0;
+}
+
+/* Estilos para el inspector de tramas */
+.byte-block {
+    transition: all 0.2s ease;
+    cursor: help;
+}
+
+.byte-block:hover {
+    transform: translateY(-5px);
+    filter: brightness(1.2);
+    z-index: 20;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Estilo para lista del índice */
+.index-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.2s;
+}
+
+.index-item:hover {
+    background: rgba(6, 182, 212, 0.1);
+    padding-left: 1.5rem;
+    cursor: pointer;
+}
+
+.index-number {
+    font-family: 'Orbitron', sans-serif;
+    color: #22d3ee;
+    font-weight: bold;
+}
+
+/* Control de visibilidad del Header Global */
+body.on-cover header#global-header {
+    transform: translateY(-100%);
+    opacity: 0;
+    pointer-events: none;
+}
+
+header#global-header {
+    transition: all 0.5s ease;
+}
+
+/* Estilos específicos del video en portada (Placeholder) */
+.video-placeholder {
+    border-radius: 1rem;
+    box-shadow: 0 0 30px rgba(6, 182, 212, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #64748b;
+}
+
+/* Ajustes scroll interno */
+.scrollable-content {
+    overflow-y: auto;
+    max-height: 100%;
+    padding-right: 0.5rem;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(15, 23, 42, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #475569;
+}
+
+/* Estilo para el logo para asegurar visibilidad */
+.header-logo {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 4px 8px;
+    border-radius: 6px;
+}
