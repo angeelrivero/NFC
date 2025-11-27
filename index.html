@@ -6,18 +6,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NFC - Redes de Comunicaciones Móviles</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        // Definimos nombres semánticos que usarán nuestras variables
+                        'main-bg': 'var(--bg-main)',
+                        'card-bg': 'var(--bg-card)',
+                        'text-main': 'var(--text-main)',
+                        'text-muted': 'var(--text-muted)',
+                    }
+                }
+            }
+        }
+    </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
 
-<body class="h-screen w-screen bg-slate-900 text-white">
+<body class="h-screen w-screen bg-main-bg text-text-main transition-colors duration-300">
 
     <header id="global-header"
-        class="fixed top-0 left-0 right-0 h-20 bg-slate-900/90 backdrop-blur border-b border-cyan-900/50 flex justify-between items-center px-8 z-50">
+        class="fixed top-0 left-0 right-0 h-20 bg-main-bg/90 backdrop-blur border-b border-cyan-900/50 flex justify-between items-center px-8 z-50">
 
-        <!-- Izquierda: Título solicitado -->
-        <div class="flex flex-col justify-center">
-            <h1 class="text-xl font-bold tracking-wider text-slate-100">Redes de Comunicaciones Móviles</h1>
+        <!-- Izquierda: Título y Switch -->
+        <div class="flex items-center gap-4">
+            <h1 class="text-xl font-bold tracking-wider text-text-main transition-colors">
+                Redes de Comunicaciones Móviles
+            </h1>
+
+            <!-- Botón Switch -->
+            <button onclick="toggleTheme()"
+                class="w-10 h-10 rounded-full bg-slate-700/50 hover:bg-cyan-500/20 flex items-center justify-center transition-all border border-slate-600 hover:border-cyan-400 group">
+                <!-- Por defecto mostramos el Sol (para indicar que podemos ir a claro) -->
+                <i class="fa-solid fa-sun text-yellow-400 transition-transform group-hover:rotate-90"
+                    id="theme-icon"></i>
+            </button>
         </div>
 
         <!-- Centro: Indicador de página -->
@@ -25,8 +50,7 @@
 
         <!-- Derecha: Logo solicitado -->
         <div class="text-right flex items-center">
-            <img src="images\Icono3.png" alt="Logo ULPGC EITE"
-                class="h-14 object-contain header-logo">
+            <img src="images\Icono3.png" alt="Logo ULPGC EITE" class="h-14 object-contain header-logo">
         </div>
     </header>
 
@@ -38,16 +62,7 @@
         <!-- 1. PORTADA PERSONALIZADA -->
         <section class="slide cover-slide active">
             <!-- Header Específico de Portada (Coincide con el estilo solicitado) -->
-            <div class="absolute top-0 left-0 w-full p-8 flex justify-between items-center z-20">
-                <div class="text-2xl font-bold text-slate-200 tracking-wide">
-                    Redes de Comunicaciones Móviles
-                </div>
-                <div>
-                    <!-- Logo grande en portada -->
-                    <img src="images/Icono3.png" alt="Logo ULPGC EITE"
-                        class="h-24 object-contain bg-white rounded-lg p-2 shadow-lg header-logo">
-                </div>
-            </div>
+
 
             <!-- Contenido Central Portada -->
             <div class="w-full max-w-7xl mx-auto grid grid-cols-12 gap-12 items-center mt-32">
@@ -55,8 +70,7 @@
                 <!-- Columna Izquierda: Título y Autores -->
                 <div class="col-span-7 space-y-16 relative z-10">
                     <div>
-                        <h1
-                            class="text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400 mb-4 leading-tight">
+                        <h1 class="text-7xl font-bold text-text-main mb-4 leading-tight">
                             NFC
                         </h1>
                         <h2 class="text-4xl text-cyan-400 font-light border-b-2 border-cyan-500/50 inline-block pb-2">
@@ -138,9 +152,10 @@
 
         <!-- 3. INTRODUCCIÓN -->
         <section class="slide">
-            <h2 class="text-3xl font-bold mb-6 text-white"><span class="text-cyan-400">1.</span> Introducción a NFC</h2>
+            <h2 class="text-3xl font-bold mb-6 text-text-main"><span class="text-cyan-400">1.</span> Introducción a NFC
+            </h2>
             <div class="grid grid-cols-2 gap-8 items-center h-full pb-8">
-                <div class="space-y-6 text-lg text-slate-300">
+                <div class="space-y-6 text-lg text-text-muted">
                     <p>
                         <strong>Near Field Communication (NFC)</strong> es un estándar de transmisión inalámbrica de
                         corto alcance y alta frecuencia.
@@ -570,11 +585,3 @@
 </body>
 
 </html>
-
-
-
-
-
-
-
-

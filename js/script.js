@@ -159,6 +159,37 @@ function animateField() {
     requestAnimationFrame(animateField);
 }
 
+// --- MODO CLARO / OSCURO ---
+function toggleTheme() {
+    const html = document.documentElement;
+    const icon = document.getElementById('theme-icon');
+    
+    // Comprobar si estamos en modo claro
+    const isLight = html.getAttribute('data-theme') === 'light';
+    
+    if (isLight) {
+        // Cambiar a Oscuro
+        html.setAttribute('data-theme', 'dark');
+        icon.className = 'fa-solid fa-sun text-yellow-400 transition-transform group-hover:rotate-90';
+        localStorage.setItem('theme', 'dark');
+    } else {
+        // Cambiar a Claro
+        html.setAttribute('data-theme', 'light');
+        icon.className = 'fa-solid fa-moon text-slate-600 transition-transform group-hover:-rotate-12';
+        localStorage.setItem('theme', 'light');
+    }
+}
+
+// Cargar preferencia al iniciar
+(function loadTheme() {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+        const icon = document.getElementById('theme-icon');
+        if(icon) icon.className = 'fa-solid fa-moon text-slate-600 transition-transform group-hover:-rotate-12';
+    }
+})();
+
 // Init
 window.onload = function () {
     updateDisplay();

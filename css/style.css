@@ -1,5 +1,35 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Orbitron:wght@400;700&display=swap');
 
+:root {
+    /* --- MODO OSCURO (Por defecto) --- */
+    --bg-main: #0f172a;
+    /* Slate 900 */
+    --bg-card: rgba(30, 41, 59, 0.7);
+    /* Slate 800 con transparencia */
+    --text-main: #f1f5f9;
+    /* Slate 100 */
+    --text-muted: #94a3b8;
+    /* Slate 400 */
+}
+
+[data-theme="light"] {
+    /* --- MODO CLARO --- */
+    --bg-main: #f8fafc;
+    /* Slate 50 */
+    --bg-card: rgba(255, 255, 255, 0.8);
+    /* Blanco con transparencia */
+    --text-main: #1e293b;
+    /* Slate 800 */
+    --text-muted: #64748b;
+    /* Slate 500 */
+}
+
+/* Actualiza la clase glass-panel para usar la variable */
+.glass-panel {
+    background: var(--bg-card);
+    /* ... resto de propiedades ... */
+}
+
 body {
     font-family: 'Roboto', sans-serif;
     background-color: #0f172a;
@@ -98,11 +128,6 @@ body {
 }
 
 /* Control de visibilidad del Header Global */
-body.on-cover header#global-header {
-    transform: translateY(-100%);
-    opacity: 0;
-    pointer-events: none;
-}
 
 header#global-header {
     transition: all 0.5s ease;
