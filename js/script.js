@@ -41,9 +41,8 @@ function updateDisplay() {
             : 'w-2 h-2 rounded-full bg-slate-600 transition-all duration-300 cursor-pointer hover:bg-cyan-600';
     });
 
-    // Iniciar animaciones específicas si estamos en la diapositiva correcta
-    // Diapositiva 3 es índice 3 (empezando en 0 es la 4ta slide) -> Funcionamiento
-    if (currentSlide === 3) {
+    // Si estamos en la diapositiva del canvas, redimensionarlo
+    if (currentSlide === 4) {
         setTimeout(resizeFieldCanvas, 100);
     }
 }
@@ -100,7 +99,7 @@ function runSimulation() {
     }, 1050);
 }
 
-// --- LÓGICA INSPECTOR APDU (DIAPOSITIVA 6 / Índice 5) ---
+// --- LÓGICA INSPECTOR APDU ---
 const apduInfo = {
     'CLA': { t: 'Class Byte', d: 'Define la clase de instrucción. (0x00 Estándar, 0x80 Propietario).', c: 'border-cyan-500' },
     'INS': { t: 'Instruction Byte', d: 'Código de la operación. (Ej: 0xA4 = SELECT FILE).', c: 'border-cyan-500' },
@@ -138,7 +137,7 @@ function resizeFieldCanvas() {
 window.addEventListener('resize', resizeFieldCanvas);
 
 function animateField() {
-    if (!ctx || currentSlide !== 3) {
+    if (!ctx || currentSlide !== 4) {
         requestAnimationFrame(animateField);
         return;
     }
@@ -163,10 +162,10 @@ function animateField() {
 function toggleTheme() {
     const html = document.documentElement;
     const icon = document.getElementById('theme-icon');
-    
+
     // Comprobar si estamos en modo claro
     const isLight = html.getAttribute('data-theme') === 'light';
-    
+
     if (isLight) {
         // Cambiar a Oscuro
         html.setAttribute('data-theme', 'dark');
@@ -186,7 +185,7 @@ function toggleTheme() {
     if (savedTheme === 'light') {
         document.documentElement.setAttribute('data-theme', 'light');
         const icon = document.getElementById('theme-icon');
-        if(icon) icon.className = 'fa-solid fa-moon text-slate-600 transition-transform group-hover:-rotate-12';
+        if (icon) icon.className = 'fa-solid fa-moon text-slate-600 transition-transform group-hover:-rotate-12';
     }
 })();
 

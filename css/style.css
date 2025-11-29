@@ -20,7 +20,7 @@
     /* COLORES DE TEXTO INVERTIDOS PARA MODO CLARO */
     --text-main: #0f172a;      /* Negro/Azul muy oscuro (Slate 900) */
     --text-muted: #475569;     /* Gris oscuro (Slate 600) */
-    --color-accent: #0891b2;   /* AZUL OSCURO (Cyan 600) - Para que se lea bien sobre blanco */
+    --color-accent: #0891b2;   /* AZUL OSCURO (Cyan 600) */
     --border-color: rgba(0, 0, 0, 0.1);
 }
 
@@ -28,7 +28,7 @@
 body {
     font-family: 'Roboto', sans-serif;
     background-color: var(--bg-main);
-    color: var(--text-main); /* Usamos la variable, no un color fijo */
+    color: var(--text-main); 
     overflow: hidden;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
@@ -42,8 +42,8 @@ body {
     transition: background 0.3s, border-color 0.3s;
 }
 
-/* El resto de tu CSS se mantiene igual... */
 .digital-font { font-family: 'Orbitron', sans-serif; }
+
 .slide {
     position: absolute; inset: 0; opacity: 0; pointer-events: none;
     transition: opacity 0.5s ease-in-out, transform 0.5s ease;
@@ -55,7 +55,7 @@ body {
 
 .neon-border {
     box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
-    border-color: var(--color-accent); /* El borde neón también obedecerá al tema */
+    border-color: var(--color-accent);
 }
 
 /* Animaciones y utilidades extra */
@@ -64,12 +64,17 @@ body {
 .byte-block:hover { transform: translateY(-5px); filter: brightness(1.2); z-index: 20; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
 .index-item { display: flex; align-items: center; gap: 1rem; padding: 0.75rem; border-bottom: 1px solid var(--border-color); transition: all 0.2s; }
 .index-item:hover { background: rgba(6, 182, 212, 0.1); padding-left: 1.5rem; cursor: pointer; }
-
-/* Aquí usamos la variable accent para el número del índice */
 .index-number { font-family: 'Orbitron', sans-serif; color: var(--color-accent); font-weight: bold; }
 
 header#global-header { transition: all 0.5s ease; }
 .header-logo { background-color: rgba(255, 255, 255, 0.9); padding: 4px 8px; border-radius: 6px; }
+
+/* Animación personalizada para el móvil en la intro */
+.phone-float { animation: phone-float 3s ease-in-out infinite; }
+@keyframes phone-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
 
 /* Scrollbars */
 ::-webkit-scrollbar { width: 8px; }
