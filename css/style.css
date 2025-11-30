@@ -98,6 +98,48 @@ header#global-header { transition: all 0.5s ease; }
     perspective: 1000px;
 }
 
+/* --- Estilos Slide P2P (NameDrop) --- */
+
+@keyframes ripple-effect {
+    0% { transform: scale(0.8); opacity: 1; border-width: 2px; }
+    100% { transform: scale(2.5); opacity: 0; border-width: 0px; }
+}
+
+.ripple-active::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 4px solid rgba(168, 85, 247, 0.8);
+    animation: ripple-effect 1s ease-out infinite;
+    z-index: 0;
+}
+
+/* Animación de "vuelo" del contacto */
+@keyframes fly-up {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    50% { transform: translateY(-50px) scale(0.5); opacity: 0.5; }
+    100% { transform: translateY(-100px) scale(0); opacity: 0; }
+}
+
+.contact-fly-out {
+    animation: fly-up 0.6s ease-in-out forwards;
+}
+
+/* Efecto de fulgor en la pantalla al conectar */
+.screen-flash {
+    animation: flash 0.5s ease-out;
+}
+
+@keyframes flash {
+    0% { background-color: rgba(168, 85, 247, 0.8); }
+    100% { background-color: transparent; }
+}
+
 
 /* Scrollbars */
 ::-webkit-scrollbar { width: 8px; }
