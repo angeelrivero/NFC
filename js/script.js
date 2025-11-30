@@ -725,6 +725,69 @@ function triggerPayment() {
     }, 3500);
 }
 
+// ==========================================
+//  SLIDE 10: INSPECTOR DE TRAMA (ISO 14443-4)
+// ==========================================
+
+const frameData = {
+    'PCB': {
+        title: 'PCB (Protocol Control Byte)',
+        desc: 'El "Semáforo". Es el byte de control con banderas (flags). Indica el tipo de bloque: I-Block (Datos), R-Block (Confirmación/ACK) o S-Block (Suspensión/Wait).',
+        color: 'border-yellow-500'
+    },
+    'CID': {
+        title: 'CID (Card Identifier)',
+        desc: 'La "Dirección" (Opcional). Si hay varias tarjetas en el campo, este byte dice a cuál le hablas (0, 1, 2...).',
+        color: 'border-blue-500'
+    },
+    'NAD': {
+        title: 'NAD (Node Address)',
+        desc: '"Enrutamiento" (Muy raro). Se usa para crear sub-redes lógicas dentro de una conexión. Casi nunca lo verás en un pago normal.',
+        color: 'border-slate-500'
+    },
+    'INF': {
+        title: 'INF (Information Field)',
+        desc: 'La "Carga" o Payload. Aquí viaja lo importante: el paquete APDU (Application Protocol Data Unit). Es el "idioma" real que entiende el chip (ej: "Dame el saldo").',
+        color: 'border-green-500'
+    },
+    'EDC': {
+        title: 'EDC (Error Detection Code)',
+        desc: 'El "Sello" de seguridad (CRC). Son 2 bytes de cálculo matemático. Si al llegar el paquete la suma no cuadra, el bloque se tira a la basura.',
+        color: 'border-red-500'
+    }
+};
+
+function showFrameInfo(id) {
+    const info = frameData[id];
+    const box = document.getElementById('frame-info-box');
+    const title = document.getElementById('frame-title');
+    const desc = document.getElementById('frame-desc');
+
+    if (info && box) {
+        title.innerText = info.title;
+        desc.innerText = info.desc;
+        
+        // Resetear clases de color del borde
+        box.classList.remove('border-slate-600', 'border-yellow-500', 'border-blue-500', 'border-green-500', 'border-red-500');
+        box.classList.add(info.color);
+        box.classList.add('bg-slate-800'); // Un poco más oscuro para resaltar
+    }
+}
+
+function resetFrameInfo() {
+    const box = document.getElementById('frame-info-box');
+    const title = document.getElementById('frame-title');
+    const desc = document.getElementById('frame-desc');
+
+    if (box) {
+        title.innerText = 'Estructura del Bloque ISO-DEP';
+        desc.innerText = 'Pasa el cursor por los "vagones" de arriba para ver qué hace cada byte en la transmisión.';
+        
+        box.classList.remove('border-yellow-500', 'border-blue-500', 'border-green-500', 'border-red-500', 'bg-slate-800');
+        box.classList.add('border-slate-600');
+    }
+}
+
 
 // ==========================================
 //  INSPECTOR APDU
