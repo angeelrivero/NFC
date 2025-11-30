@@ -297,6 +297,59 @@ function animateWaves() {
     animationId = requestAnimationFrame(animateWaves);
 }
 
+// --- LÓGICA DE ARQUITECTURA (Slide 5) ---
+function highlightHw(id) {
+    // 1. Apagar todos (Grayscale y opacidad baja)
+    const ids = ['hw-host', 'hw-nfcc', 'hw-se', 'hw-ant'];
+    ids.forEach(elId => {
+        const el = document.getElementById(elId);
+        if(el) {
+            el.classList.add('opacity-30', 'grayscale', 'scale-95');
+            el.classList.remove('opacity-100', 'grayscale-0', 'scale-105', 'shadow-[0_0_30px_rgba(255,255,255,0.3)]', 'bg-slate-700');
+            // Quitar bordes de colores específicos para resetear
+            el.style.borderColor = ""; 
+        }
+    });
+
+    // 2. Encender el seleccionado
+    const target = document.getElementById(id);
+    if(target) {
+        target.classList.remove('opacity-30', 'grayscale', 'scale-95');
+        target.classList.add('opacity-100', 'grayscale-0', 'scale-105', 'transition-all');
+        
+        // Efectos específicos por color
+        if(id === 'hw-se') {
+            target.classList.add('shadow-[0_0_30px_rgba(239,68,68,0.5)]'); // Rojo
+        } else if (id === 'hw-nfcc') {
+            target.classList.add('shadow-[0_0_30px_rgba(6,182,212,0.5)]'); // Cyan
+        } else if (id === 'hw-ant') {
+            target.classList.add('shadow-[0_0_30px_rgba(255,255,255,0.3)]'); // Blanco
+            target.querySelector('i').classList.add('text-white');
+            target.style.borderColor = "#fff";
+        }
+    }
+}
+
+function resetHw() {
+    // Volver al estado "normal" (Host y SE apagados, NFCC encendido suave)
+    const ids = ['hw-host', 'hw-nfcc', 'hw-se', 'hw-ant'];
+    ids.forEach(elId => {
+        const el = document.getElementById(elId);
+        if(el) {
+            // Reset general
+            el.classList.remove('opacity-30', 'opacity-100', 'grayscale-0', 'scale-105', 'scale-95', 'shadow-[0_0_30px_rgba(239,68,68,0.5)]', 'shadow-[0_0_30px_rgba(6,182,212,0.5)]', 'shadow-[0_0_30px_rgba(255,255,255,0.3)]');
+            el.style.borderColor = "";
+            
+            // Estado por defecto
+            if(elId === 'hw-nfcc') {
+                el.classList.add('opacity-100', 'grayscale-0'); // NFCC siempre visible
+            } else {
+                el.classList.add('opacity-50', 'grayscale'); // Resto semi-apagados
+            }
+        }
+    });
+}
+
 
 // --- INSPECTOR APDU (Slide 6) ---
 const apduInfo = {
