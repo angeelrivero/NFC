@@ -15,13 +15,13 @@
 [data-theme="light"] {
     /* --- MODO CLARO --- */
     --bg-main: #f8fafc;        /* Fondo claro */
-    --bg-card: rgba(255, 255, 255, 0.8);
+    --bg-card: rgba(255, 255, 255, 0.85); /* Más opaco para mejor contraste */
     
     /* COLORES DE TEXTO INVERTIDOS PARA MODO CLARO */
     --text-main: #0f172a;      /* Negro/Azul muy oscuro (Slate 900) */
-    --text-muted: #475569;     /* Gris oscuro (Slate 600) */
+    --text-muted: #334155;     /* Gris oscuro (Slate 700) */
     --color-accent: #0891b2;   /* AZUL OSCURO (Cyan 600) */
-    --border-color: rgba(0, 0, 0, 0.1);
+    --border-color: rgba(0, 0, 0, 0.2);
 }
 
 /* Base */
@@ -145,3 +145,103 @@ header#global-header { transition: all 0.5s ease; }
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 4px; opacity: 0.5; }
+
+/* ========================================================================== */
+/* SOBRESCRITURA DE CLASES TAILWIND PARA MODO CLARO (CORRECCIÓN FINAL)        */
+/* ========================================================================== */
+
+/* 1. TEXTOS BÁSICOS */
+[data-theme="light"] .text-white { color: #1e293b !important; } /* De blanco a Slate-800 */
+[data-theme="light"] .text-slate-300 { color: #475569 !important; } 
+[data-theme="light"] .text-slate-400 { color: #64748b !important; }
+[data-theme="light"] .text-slate-500 { color: #64748b !important; }
+
+/* 2. TEXTOS DE SUBTÍTULOS (TRAMAS Y AVISOS) - Los que eran "200" */
+/* Estos eran muy claros (amarillo pastel, azul pastel), ahora los forzamos a oscuros */
+[data-theme="light"] .text-yellow-200, 
+[data-theme="light"] .text-yellow-200\/90 { color: #854d0e !important; } /* A Marrón oscuro */
+[data-theme="light"] .text-blue-200 { color: #1e40af !important; } /* A Azul oscuro */
+[data-theme="light"] .text-green-200 { color: #166534 !important; } /* A Verde oscuro */
+[data-theme="light"] .text-red-200 { color: #991b1b !important; } /* A Rojo oscuro */
+[data-theme="light"] .text-slate-200 { color: #334155 !important; }
+
+/* 3. COLORES DE ACENTO PRINCIPALES */
+[data-theme="light"] .text-yellow-400 { color: #d97706 !important; } 
+[data-theme="light"] .text-blue-400, 
+[data-theme="light"] .text-blue-500 { color: #0284c7 !important; } 
+[data-theme="light"] .text-green-400,
+[data-theme="light"] .text-green-500 { color: #16a34a !important; } 
+[data-theme="light"] .text-purple-400 { color: #9333ea !important; } 
+[data-theme="light"] .text-red-400 { color: #dc2626 !important; } 
+[data-theme="light"] .text-pink-400 { color: #db2777 !important; } 
+
+/* 4. FONDOS GENERALES (INVERSIÓN) */
+/* Los paneles oscuros generales pasan a claros */
+[data-theme="light"] .bg-slate-700,
+[data-theme="light"] .bg-slate-800,
+[data-theme="light"] .bg-slate-900 { 
+    background-color: #f1f5f9 !important; /* Slate-100 */
+    border-color: #cbd5e1 !important;      /* Slate-300 */
+    color: #1e293b !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* 5. EXCEPCIONES: OBJETOS DE SIMULACIÓN Y HARDWARE */
+/* Estos elementos DEBEN mantenerse OSCUROS o contrastados en modo claro */
+
+/* A. Hardware Architecture (Host, NFCC, SE, Antena) */
+/* Forzamos que los bordes y textos sean muy visibles en modo claro */
+[data-theme="light"] #hw-host,
+[data-theme="light"] #hw-nfcc,
+[data-theme="light"] #hw-se,
+[data-theme="light"] #hw-ant {
+    background-color: #e2e8f0 !important; /* Fondo gris suave */
+    border-color: #475569 !important;      /* Borde gris oscuro fuerte */
+    color: #0f172a !important;             /* Texto negro */
+    opacity: 1 !important;                 /* Quitar transparencia para que se vean */
+    filter: none !important;               /* Quitar grayscale */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1) !important;
+}
+/* Arreglo específico para los textos pequeños dentro del hardware */
+[data-theme="light"] #hw-host p, 
+[data-theme="light"] #hw-nfcc p, 
+[data-theme="light"] #hw-se p {
+    color: #475569 !important; /* Texto secundario gris oscuro */
+}
+
+/* B. Móviles y Chips */
+[data-theme="light"] #reader-device, 
+[data-theme="light"] #pay-phone,
+[data-theme="light"] #rw-phone,
+[data-theme="light"] #p2p-phone-1,
+[data-theme="light"] #p2p-phone-2 {
+    background-color: #334155 !important; /* Mantener Slate-700 (Gris oscuro) */
+    border-color: #1e293b !important;      /* Borde Slate-800 */
+    color: white !important;               /* Texto interno blanco */
+}
+
+/* C. Objetos 3D (Altavoces y Mesa del modo Read/Write) */
+/* La clase .speaker-box y la mesa perspectiva deben verse como objetos físicos */
+[data-theme="light"] .speaker-box {
+    background-color: #334155 !important; /* Slate-700 */
+    border-color: #1e293b !important;      /* Slate-800 */
+}
+/* La mesa (el div con transform perspectiva) */
+[data-theme="light"] .perspective-lg > div {
+    background-color: #475569 !important; /* Slate-600 */
+    border-color: #334155 !important;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2) !important;
+}
+
+/* D. Contenedores de Simulación */
+/* El fondo donde ocurren las simulaciones se puede quedar claro, pero con un borde sutil */
+[data-theme="light"] #sim-container,
+[data-theme="light"] #rw-sim-container,
+[data-theme="light"] #p2p-sim-container {
+    background-color: #f8fafc !important;
+    border: 1px solid #cbd5e1 !important;
+}
+
+/* Utilidades de fondo */
+[data-theme="light"] .bg-white\/5 { background-color: rgba(0,0,0,0.05) !important; }
+[data-theme="light"] .bg-white\/10 { background-color: rgba(0,0,0,0.1) !important; }

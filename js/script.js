@@ -232,6 +232,9 @@ function animateWaves() {
     const reader = document.getElementById('reader-device');
     const container = document.getElementById('sim-container');
     
+    // DETECTAR TEMA PARA COLOR DE ONDAS
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    
     if(reader && container) {
         const rRect = reader.getBoundingClientRect();
         const cRect = container.getBoundingClientRect();
@@ -240,7 +243,11 @@ function animateWaves() {
 
         const frequency = isConnected ? 0.8 : 0.92;
         if (Math.random() > frequency) {
-            waves.push({ r: 40, op: 1, color: isConnected ? '34, 197, 94' : '6, 182, 212' });
+            // Modificación: Colores más oscuros si el tema es Light
+            const colorConnected = isLight ? '21, 128, 61' : '34, 197, 94'; // Green-700 : Green-500
+            const colorIdle = isLight ? '8, 145, 178' : '6, 182, 212';     // Cyan-600 : Cyan-400
+            
+            waves.push({ r: 40, op: 1, color: isConnected ? colorConnected : colorIdle });
         }
 
         simCtx.lineWidth = isConnected ? 4 : 2;
@@ -248,7 +255,11 @@ function animateWaves() {
         waves.forEach((w, i) => {
             w.r += isConnected ? 4 : 2; 
             w.op -= 0.015;
-            const targetColor = isConnected ? '34, 197, 94' : '6, 182, 212'; 
+            
+            // Re-evaluar color en cada frame por si cambia el tema en vivo
+            const colorConnected = isLight ? '21, 128, 61' : '34, 197, 94';
+            const colorIdle = isLight ? '8, 145, 178' : '6, 182, 212';
+            const targetColor = isConnected ? colorConnected : colorIdle; 
             w.color = targetColor;
 
             if (w.op > 0) {
