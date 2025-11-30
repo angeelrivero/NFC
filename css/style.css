@@ -76,6 +76,28 @@ header#global-header { transition: all 0.5s ease; }
     50% { transform: translateY(-15px); }
 }
 
+/* --- Estilos Slide Reader/Writer (Fiesta) --- */
+
+/* Animación de ondas de sonido */
+@keyframes sound-pulse {
+    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; border-color: var(--color-accent); }
+    100% { transform: translate(-50%, -50%) scale(2.5); opacity: 0; border-color: transparent; }
+}
+
+.speaker-active .sound-wave {
+    animation: sound-pulse 1.5s infinite ease-out;
+}
+
+.speaker-active .speaker-box {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 30px rgba(34, 211, 238, 0.5);
+    transform: scale(1.05);
+}
+
+.perspective-lg {
+    perspective: 1000px;
+}
+
 
 /* Scrollbars */
 ::-webkit-scrollbar { width: 8px; }

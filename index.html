@@ -96,17 +96,17 @@
                     <div>
                         <div class="index-item" onclick="changeSlideTo(2)"><span class="index-number">01</span><span>Introducción a NFC</span></div>
                         <div class="index-item" onclick="changeSlideTo(4)"><span class="index-number">02</span><span>Funcionamiento y arquitectura</span></div>
-                        <div class="index-item" onclick="changeSlideTo(5)"><span class="index-number">03</span><span>Modos de operación</span></div>
-                        <div class="index-item" onclick="changeSlideTo(6)"><span class="index-number">04</span><span>Estructura de tramas NFC</span></div>
-                        <div class="index-item" onclick="changeSlideTo(7)"><span class="index-number">05</span><span>Estándares y protocolos</span></div>
+                        <div class="index-item" onclick="changeSlideTo(6)"><span class="index-number">03</span><span>Modos de operación</span></div>
+                        <div class="index-item" onclick="changeSlideTo(10)"><span class="index-number">04</span><span>Estructura de tramas NFC</span></div>
+                        <div class="index-item" onclick="changeSlideTo(11)"><span class="index-number">05</span><span>Estándares y protocolos</span></div>
                     </div>
                     <div>
-                        <div class="index-item" onclick="changeSlideTo(8)"><span class="index-number">06</span><span>Seguridad en NFC</span></div>
-                        <div class="index-item" onclick="changeSlideTo(9)"><span class="index-number">07</span><span>Aplicaciones reales</span></div>
-                        <div class="index-item" onclick="changeSlideTo(10)"><span class="index-number">08</span><span>Ventajas y limitaciones</span></div>
-                        <div class="index-item" onclick="changeSlideTo(11)"><span class="index-number">09</span><span>Futuro de NFC</span></div>
-                        <div class="index-item" onclick="changeSlideTo(12)"><span class="index-number">10</span><span>Conclusión</span></div>
-                        <div class="index-item" onclick="changeSlideTo(13)"><span class="index-number">11</span><span>Bibliografía</span></div>
+                        <div class="index-item" onclick="changeSlideTo(12)"><span class="index-number">06</span><span>Seguridad en NFC</span></div>
+                        <div class="index-item" onclick="changeSlideTo(13)"><span class="index-number">07</span><span>Aplicaciones reales</span></div>
+                        <div class="index-item" onclick="changeSlideTo(14)"><span class="index-number">08</span><span>Ventajas y limitaciones</span></div>
+                        <div class="index-item" onclick="changeSlideTo(15)"><span class="index-number">09</span><span>Futuro de NFC</span></div>
+                        <div class="index-item" onclick="changeSlideTo(16)"><span class="index-number">10</span><span>Conclusión</span></div>
+                        <div class="index-item" onclick="changeSlideTo(17)"><span class="index-number">11</span><span>Bibliografía</span></div>
                     </div>
                 </div>
             </div>
@@ -231,19 +231,14 @@
 
             <div class="grid grid-cols-12 gap-6 h-full pb-4">
                 <div class="col-span-7 glass-panel rounded-2xl p-0 relative flex flex-col overflow-hidden neon-border bg-slate-900 select-none" id="sim-container">
-                    
                     <canvas id="magneticCanvas" class="absolute inset-0 w-full h-full z-0 pointer-events-none"></canvas>
-                    
-                    <div class="absolute top-1/2 left-1/4 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 border-2 border-dashed border-slate-600/50 rounded-full flex items-center justify-center opacity-30 z-0 pointer-events-none">
-                    </div>
+                    <div class="absolute top-1/2 left-1/4 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 border-2 border-dashed border-slate-600/50 rounded-full flex items-center justify-center opacity-30 z-0 pointer-events-none"></div>
 
                     <div class="relative z-10 w-full h-full flex items-center justify-between px-12" id="sim-scene">
-                        
                         <div class="absolute top-1/2 left-1/4 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center z-10 pointer-events-none" id="reader-group">
                             <div class="w-32 h-56 bg-slate-800 rounded-3xl border-4 border-slate-500 flex flex-col items-center justify-center shadow-2xl relative transition-all duration-300" id="reader-device">
                                 <i class="fa-solid fa-wifi text-6xl text-slate-600 transition-all duration-300" id="wifi-icon"></i>
                                 <div class="mt-4 text-xs font-mono text-slate-500 font-bold" id="reader-status">ESPERANDO...</div>
-                                
                                 <div id="success-overlay" class="absolute inset-0 flex flex-col items-center justify-center bg-green-500/90 rounded-2xl opacity-0 transition-opacity duration-200">
                                     <i class="fa-solid fa-check-circle text-6xl text-white mb-2 drop-shadow-md"></i>
                                     <span class="text-white font-bold text-lg">CONECTADO</span>
@@ -254,11 +249,9 @@
 
                         <div class="absolute top-1/2 right-16 transform -translate-y-1/2 cursor-grab active:cursor-grabbing hover:scale-105 transition-transform z-50 group" 
                              id="draggable-card">
-                            
                             <div class="absolute -top-10 left-0 right-0 text-center text-xs text-accent animate-bounce pointer-events-none">
                                 <i class="fa-solid fa-hand-pointer"></i> Arrástrame
                             </div>
-
                             <div class="w-32 h-52 bg-slate-200 rounded-xl border-4 border-slate-400 flex flex-col items-center justify-center shadow-xl relative overflow-hidden pointer-events-none" id="card-body">
                                 <div class="absolute inset-0 bg-gradient-to-br from-white to-slate-300"></div>
                                 <div class="w-12 h-10 bg-yellow-500 rounded mb-4 border border-yellow-600 flex items-center justify-center shadow-inner" id="chip-visual">
@@ -268,7 +261,6 @@
                             </div>
                             <p class="mt-4 font-bold text-slate-500 text-center select-none pointer-events-none">TARJETA</p>
                         </div>
-
                     </div>
                 </div>
 
@@ -278,7 +270,6 @@
                         <p class="text-text-main mb-4 leading-relaxed text-sm">
                             La comunicación no ocurre por arte de magia, ocurre por <strong>inducción magnética</strong>.
                         </p>
-                        
                         <h4 class="font-bold text-white mb-2 flex items-center gap-2 text-sm"><i class="fa-solid fa-magnet text-accent"></i> 1. Acoplamiento Inductivo</h4>
                         <ul class="text-xs text-text-muted list-disc pl-4 space-y-2 mb-4 bg-black/20 p-3 rounded-lg">
                             <li><strong class="text-accent">El Lector:</strong> Genera un campo magnético constante (observa las ondas azules).</li>
@@ -286,7 +277,6 @@
                             <li><strong class="text-green-400">Resultado:</strong> El campo magnético se transforma en electricidad dentro de la tarjeta.</li>
                         </ul>
                     </div>
-
                     <div class="glass-panel p-5 border-l-4 border-yellow-500 relative overflow-hidden flex-grow">
                         <h4 class="font-bold text-white mb-2 flex items-center gap-2 text-sm"><i class="fa-solid fa-bolt text-yellow-500"></i> ¡Pruébalo!</h4>
                         <p class="text-sm text-text-muted mb-2">
@@ -307,30 +297,23 @@
             </div>
             
             <div class="grid grid-cols-2 gap-8 h-full pb-8 items-center">
-                
                 <div class="glass-panel p-8 relative flex flex-col items-center justify-center h-full bg-slate-900/80 border border-slate-700 shadow-2xl overflow-hidden">
                     <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#475569 1px, transparent 1px); background-size: 20px 20px;"></div>
-
                     <div id="hw-host" class="w-48 p-3 bg-slate-800 border-2 border-slate-600 rounded-lg text-center relative z-10 transition-all duration-300 opacity-50 grayscale">
                         <i class="fa-brands fa-android text-2xl mb-1 text-slate-400"></i>
                         <h4 class="font-bold text-slate-300 text-sm">HOST CPU</h4>
                         <p class="text-[10px] text-slate-500">S.O. (Android/iOS)</p>
                         <div class="absolute left-1/2 bottom-[-40px] w-1 h-10 bg-slate-600 -translate-x-1/2 z-0"></div>
                     </div>
-
                     <div class="h-10"></div>
-
                     <div id="hw-nfcc" class="w-56 p-4 bg-slate-800 border-2 border-accent rounded-xl text-center relative z-20 transition-all duration-300 shadow-[0_0_15px_rgba(6,182,212,0.1)]">
                         <i class="fa-solid fa-microchip text-3xl mb-1 text-accent"></i>
                         <h4 class="font-bold text-accent text-lg font-orbitron">NFC CONTROLLER</h4>
                         <p class="text-xs text-accent/70 font-bold">Modem / Cerebro RF</p>
-                        
                         <div class="absolute left-[-40px] top-1/2 w-10 h-1 bg-slate-600 -translate-y-1/2 z-0"></div>
                         <div class="absolute left-1/2 bottom-[-40px] w-1 h-10 bg-accent -translate-x-1/2 z-0"></div>
                     </div>
-
                     <div class="w-full flex justify-between items-start mt-10 px-4 relative">
-                        
                         <div class="absolute left-4 top-[-60px] flex flex-col items-end">
                              <div id="hw-se" class="w-40 p-3 bg-slate-800 border-2 border-red-500 rounded-lg text-center relative z-10 transition-all duration-300 opacity-50 grayscale">
                                 <i class="fa-solid fa-vault text-2xl mb-1 text-red-400"></i>
@@ -339,7 +322,6 @@
                             </div>
                             <div class="w-8 h-24 border-t-2 border-r-2 border-slate-600 rounded-tr-xl absolute -right-8 -top-12 pointer-events-none"></div>
                         </div>
-
                         <div class="w-full flex justify-center mt-2">
                              <div id="hw-ant" class="w-48 h-24 border-4 border-double border-slate-500 rounded-[50%] flex flex-col items-center justify-center bg-transparent relative z-10 transition-all duration-300 opacity-50 grayscale">
                                 <i class="fa-solid fa-wifi text-2xl text-slate-400 mb-1"></i>
@@ -349,9 +331,7 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="flex flex-col gap-4 h-full overflow-y-auto pr-2">
-                    
                     <div class="glass-panel p-4 border-l-4 border-slate-500 hover:bg-white/5 transition-all cursor-default"
                          onmouseenter="highlightHw('hw-ant')" onmouseleave="resetHw()">
                         <h3 class="font-bold text-lg text-white mb-1 flex items-center gap-2">
@@ -360,7 +340,6 @@
                         </h3>
                         <p class="text-sm text-text-muted">No es una antena de palo, es una <strong>bobina plana</strong> (cable en espiral). Suele ir pegada en la tapa trasera o en la batería.</p>
                     </div>
-
                     <div class="glass-panel p-4 border-l-4 border-accent hover:bg-accent/5 transition-all cursor-default"
                          onmouseenter="highlightHw('hw-nfcc')" onmouseleave="resetHw()">
                         <h3 class="font-bold text-lg text-accent mb-1 flex items-center gap-2">
@@ -369,7 +348,6 @@
                         </h3>
                         <p class="text-sm text-text-muted">Es el <strong>"módem"</strong>. Crea el campo de 13.56 MHz, modula y demodula los datos. Le quita todo el trabajo pesado al procesador principal.</p>
                     </div>
-                    
                     <div class="glass-panel p-4 border-l-4 border-red-500 hover:bg-red-500/5 transition-all cursor-default relative overflow-hidden"
                          onmouseenter="highlightHw('hw-se')" onmouseleave="resetHw()">
                         <div class="absolute right-2 top-2 text-red-500/10 text-4xl"><i class="fa-solid fa-shield-halved"></i></div>
@@ -382,46 +360,269 @@
                             <i class="fa-solid fa-lock mr-1"></i> Si entra un virus en Android (Host), <strong>no puede leer tu tarjeta</strong> porque el chip está aislado físicamente.
                         </p>
                     </div>
-
                 </div>
             </div>
         </section>
 
         <section class="slide">
-            <h2 class="text-3xl font-bold mb-8 text-text-main"><span class="text-accent">3.</span> Modos de Operación
-            </h2>
-             <div class="grid grid-cols-3 gap-6 h-full pb-12">
-                <div
-                    class="glass-panel p-6 flex flex-col items-center text-center hover:bg-accent/10 transition transform hover:-translate-y-2">
-                    <div
-                        class="w-16 h-16 rounded-full bg-accent/20 flex items-center justify-center mb-4 text-accent text-2xl">
-                        <i class="fa-solid fa-eye"></i>
+            <h2 class="text-3xl font-bold mb-8 text-text-main"><span class="text-accent">3.</span> Modos de Operación</h2>
+            <div class="grid grid-cols-2 gap-12 h-full items-center">
+                <div class="space-y-8">
+                    <div class="glass-panel p-8 border-l-4 border-accent">
+                        <h3 class="text-3xl font-bold text-white mb-4">El Móvil como "Actor"</h3>
+                        <p class="text-xl text-text-muted leading-relaxed">
+                            El NFC es único porque permite que un mismo dispositivo interprete <strong>3 personajes diferentes</strong> según la situación.
+                        </p>
                     </div>
-                    <h3 class="text-xl font-bold mb-2 text-text-main">Lectura / Escritura</h3>
-                    <p class="text-sm text-text-muted">El móvil activo lee o escribe en etiquetas pasivas (Tags).</p>
-                    <div class="mt-auto pt-4 text-xs text-accent font-mono">Ej: Smart Posters</div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-slate-800 p-6 rounded-xl border border-accent/30 text-center">
+                            <i class="fa-solid fa-bolt text-4xl text-yellow-400 mb-3"></i>
+                            <h4 class="font-bold text-white">ACTIVO</h4>
+                            <p class="text-sm text-slate-400">Pone la energía (Lector)</p>
+                        </div>
+                        <div class="bg-slate-800 p-6 rounded-xl border border-green-500/30 text-center">
+                            <i class="fa-solid fa-battery-empty text-4xl text-green-400 mb-3"></i>
+                            <h4 class="font-bold text-white">PASIVO</h4>
+                            <p class="text-sm text-slate-400">Usa la energía del otro</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-4">
+                    <div class="glass-panel p-4 flex items-center gap-4 opacity-50">
+                        <span class="text-4xl text-accent font-bold">1</span>
+                        <div>
+                            <h4 class="font-bold text-white">Lector / Grabador</h4>
+                            <p class="text-sm text-slate-400">"El móvil es el jefe"</p>
+                        </div>
+                    </div>
+                    <div class="glass-panel p-4 flex items-center gap-4 opacity-50">
+                        <span class="text-4xl text-purple-400 font-bold">2</span>
+                        <div>
+                            <h4 class="font-bold text-white">Peer-to-Peer (P2P)</h4>
+                            <p class="text-sm text-slate-400">"De igual a igual"</p>
+                        </div>
+                    </div>
+                    <div class="glass-panel p-4 flex items-center gap-4 opacity-50">
+                        <span class="text-4xl text-green-400 font-bold">3</span>
+                        <div>
+                            <h4 class="font-bold text-white">Emulación de Tarjeta</h4>
+                            <p class="text-sm text-slate-400">"El móvil se disfraza"</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="slide">
+            <h2 class="text-3xl font-bold mb-4 text-text-main"><span class="text-accent">3.</span> Modos de Operación</h2>
+            <div class="flex items-center gap-2 mb-6">
+                <span class="bg-accent text-black px-3 py-1 rounded text-xs font-bold">MODO 1</span> 
+                <span class="text-accent font-bold">READER / WRITER (El Iniciador)</span>
+            </div>
+            
+            <div class="grid grid-cols-12 gap-8 h-full pb-8">
+                <div class="col-span-4 flex flex-col justify-center space-y-6">
+                    <div class="glass-panel p-6 border-l-4 border-accent">
+                        <h3 class="text-xl font-bold text-white mb-2">El Móvil es el "Jefe"</h3>
+                        <p class="text-sm text-text-muted leading-relaxed mb-4">
+                            En este modo, tu dispositivo genera el campo RF para leer/escribir en una etiqueta (Tag) pasiva.
+                        </p>
+                        <div class="bg-slate-900/50 p-3 rounded border border-slate-600">
+                            <h4 class="text-accent text-xs font-bold uppercase mb-2">Rutina "Modo Fiesta":</h4>
+                            <ul class="text-xs text-slate-300 space-y-2">
+                                <li><i class="fa-brands fa-bluetooth text-blue-400 w-4"></i> 1. Encender Bluetooth</li>
+                                <li><i class="fa-solid fa-volume-high text-green-400 w-4"></i> 2. Conectar Altavoces</li>
+                                <li><i class="fa-brands fa-spotify text-green-500 w-4"></i> 3. Reproducir Playlist</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="text-center animate-pulse text-accent text-sm">
+                        <i class="fa-solid fa-arrow-right"></i> Arrastra el móvil a la etiqueta NFC
+                    </div>
                 </div>
 
-                <div
-                    class="glass-panel p-6 flex flex-col items-center text-center hover:bg-indigo-500/10 transition transform hover:-translate-y-2">
-                    <div
-                        class="w-16 h-16 rounded-full bg-indigo-500/20 flex items-center justify-center mb-4 text-indigo-500 text-2xl">
-                        <i class="fa-solid fa-right-left"></i>
+                <div class="col-span-8 relative glass-panel p-0 overflow-hidden bg-slate-800 flex flex-col" id="rw-sim-container">
+                    
+                    <div class="absolute inset-0 z-0 bg-[url('https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-20"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/80 to-transparent z-0"></div>
+
+                    <div class="relative z-10 w-full h-full flex flex-col justify-between p-8">
+                        
+                        <div class="flex justify-between items-start w-full px-10 pt-4">
+                            <div class="relative group">
+                                <div class="w-24 h-40 bg-slate-700 rounded-lg border-4 border-slate-600 flex flex-col items-center justify-center shadow-2xl speaker-box transition-all duration-300">
+                                    <div class="w-16 h-16 bg-slate-800 rounded-full border-2 border-slate-500 mb-4 shadow-inner"></div>
+                                    <div class="w-8 h-8 bg-slate-800 rounded-full border border-slate-500 shadow-inner"></div>
+                                </div>
+                                <div class="sound-wave absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full border-2 border-accent rounded-lg opacity-0 pointer-events-none"></div>
+                                <div class="sound-wave absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full border-2 border-accent rounded-lg opacity-0 delay-100 pointer-events-none"></div>
+                            </div>
+
+                            <div class="flex flex-col items-center justify-center mt-10">
+                                <div id="party-status" class="bg-black/80 backdrop-blur px-6 py-3 rounded-full border border-accent/30 text-accent font-bold text-sm opacity-0 transition-all transform translate-y-4">
+                                    <i class="fa-brands fa-spotify text-green-500 mr-2 text-xl"></i> Pepe Benavente - El Polvorete
+                                </div>
+                            </div>
+
+                            <div class="relative group">
+                                <div class="w-24 h-40 bg-slate-700 rounded-lg border-4 border-slate-600 flex flex-col items-center justify-center shadow-2xl speaker-box transition-all duration-300">
+                                    <div class="w-16 h-16 bg-slate-800 rounded-full border-2 border-slate-500 mb-4 shadow-inner"></div>
+                                    <div class="w-8 h-8 bg-slate-800 rounded-full border border-slate-500 shadow-inner"></div>
+                                </div>
+                                <div class="sound-wave absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full border-2 border-accent rounded-lg opacity-0 pointer-events-none"></div>
+                                <div class="sound-wave absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full border-2 border-accent rounded-lg opacity-0 delay-100 pointer-events-none"></div>
+                            </div>
+                        </div>
+
+                        <div class="relative w-full flex justify-center items-end h-1/2">
+                            <div class="absolute bottom-0 w-3/4 h-32 bg-slate-700 transform perspective-lg rotate-x-12 rounded-t-xl border-t border-slate-500 shadow-2xl"></div>
+                            
+                            <div id="rw-tag" class="absolute bottom-16 w-20 h-20 bg-white rounded-full border-4 border-slate-300 shadow-[0_0_15px_rgba(255,255,255,0.2)] flex items-center justify-center z-20 group cursor-pointer transition-transform hover:scale-105">
+                                <div class="w-16 h-16 rounded-full border-2 border-slate-100 border-dashed flex items-center justify-center">
+                                    <i class="fa-solid fa-nfc-symbol text-3xl text-slate-400"></i>
+                                </div>
+                                <div class="absolute -bottom-8 text-xs font-bold text-slate-400 bg-black/50 px-2 py-1 rounded">TAG NFC</div>
+                            </div>
+
+                            <div id="rw-phone" class="absolute bottom-10 right-10 w-28 h-52 bg-slate-900 rounded-3xl border-4 border-slate-600 shadow-2xl z-50 cursor-grab active:cursor-grabbing transition-transform" 
+                                 onmousedown="startRWDrag(event)">
+                                <div class="absolute inset-1 bg-black rounded-[20px] overflow-hidden flex flex-col relative">
+                                    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-12 h-4 bg-black rounded-b-lg z-20"></div>
+                                    
+                                    <div class="h-full w-full bg-cover bg-center flex flex-col justify-between p-3" style="background-image: url('images/wallpaper_phone.jpg'); background-color: #334155;">
+                                        <div class="flex justify-between text-[8px] text-white pt-1">
+                                            <span>12:45</span>
+                                            <div class="flex gap-1">
+                                                <i class="fa-brands fa-bluetooth text-slate-500" id="bt-icon"></i>
+                                                <i class="fa-solid fa-wifi"></i>
+                                                <i class="fa-solid fa-battery-full"></i>
+                                            </div>
+                                        </div>
+
+                                        <div id="spotify-widget" class="bg-green-600 rounded-lg p-2 mt-auto mb-4 transform translate-y-32 transition-transform duration-500">
+                                            <div class="flex items-center gap-2">
+                                                <div class="w-8 h-8 bg-black rounded">
+                                                    <img src="https://i.scdn.co/image/ab67616d0000b273180436d5d54a263889658e23" class="w-full h-full object-cover opacity-80" alt="Pepe">
+                                                </div>
+                                                <div class="flex-1 overflow-hidden">
+                                                    <p class="text-[8px] font-bold text-white truncate">El Polvorete</p>
+                                                    <p class="text-[6px] text-green-100">Pepe Benavente</p>
+                                                </div>
+                                                <i class="fa-solid fa-play text-white text-xs"></i>
+                                            </div>
+                                            <div class="w-full h-1 bg-green-800 rounded-full mt-2 overflow-hidden">
+                                                <div class="h-full bg-white w-2/3 animate-[scan_2s_linear_infinite]"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div id="scan-overlay" class="absolute inset-0 bg-accent/20 backdrop-blur-[2px] opacity-0 transition-opacity flex flex-col items-center justify-center">
+                                        <i class="fa-solid fa-nfc-symbol text-4xl text-white animate-ping"></i>
+                                        <p class="text-white text-[10px] font-bold mt-4">LEYENDO TAG...</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
-                    <h3 class="text-xl font-bold mb-2 text-text-main">Peer-to-Peer (P2P)</h3>
-                    <p class="text-sm text-text-muted">Intercambio bidireccional entre dispositivos activos.</p>
-                    <div class="mt-auto pt-4 text-xs text-indigo-500 font-mono">Ej: Android Beam</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="slide">
+            <h2 class="text-3xl font-bold mb-4 text-text-main"><span class="text-accent">3.</span> Modos de Operación</h2>
+            <div class="flex items-center gap-2 mb-6"><span class="bg-purple-500 text-white px-3 py-1 rounded text-xs font-bold">MODO 2</span> <span class="text-purple-400 font-bold">PEER-TO-PEER (P2P)</span></div>
+            
+            <div class="grid grid-cols-2 gap-12 h-full pb-8">
+                <div class="flex flex-col justify-center space-y-6">
+                    <h3 class="text-2xl font-bold text-white">"De igual a igual"</h3>
+                    <p class="text-lg text-text-muted">
+                        Dos dispositivos con batería se turnan. "Ahora genero campo yo, ahora tú".
+                    </p>
+                    <div class="glass-panel p-6 border-l-4 border-purple-500">
+                        <h4 class="font-bold text-purple-400 mb-2">Ejemplo: NameDrop (iOS)</h4>
+                        <p class="text-sm text-text-muted">
+                            En lugar de dictar tu número, acercas tu móvil al de otra persona. Tu foto y contacto "vuelan" a su pantalla.
+                        </p>
+                    </div>
                 </div>
 
-                <div
-                    class="glass-panel p-6 flex flex-col items-center text-center hover:bg-emerald-500/10 transition transform hover:-translate-y-2">
-                    <div
-                        class="w-16 h-16 rounded-full bg-emerald-500/20 flex items-center justify-center mb-4 text-emerald-500 text-2xl">
-                        <i class="fa-solid fa-credit-card"></i>
+                <div class="glass-panel p-8 flex flex-col justify-center bg-slate-800 relative overflow-hidden">
+                    <div class="flex justify-between items-center px-4 relative">
+                        <div class="w-24 h-48 bg-slate-700 rounded-2xl border-4 border-purple-500 flex items-center justify-center relative z-10">
+                            <i class="fa-solid fa-user text-4xl text-purple-300"></i>
+                        </div>
+                        
+                        <div class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-0">
+                            <button onclick="triggerP2P()" class="bg-purple-600 hover:bg-purple-500 text-white px-4 py-2 rounded-full text-xs mb-24 absolute -top-16 left-1/2 -translate-x-1/2 whitespace-nowrap z-50">
+                                <i class="fa-solid fa-play"></i> Simular P2P
+                            </button>
+                            <div id="p2p-wave" class="w-0 h-1 bg-gradient-to-r from-purple-500 to-blue-500 transition-all duration-1000"></div>
+                            <div id="p2p-icon" class="absolute top-[-20px] left-0 text-white opacity-0 transition-all duration-1000">
+                                <i class="fa-solid fa-address-card text-2xl"></i>
+                            </div>
+                        </div>
+
+                        <div class="w-24 h-48 bg-slate-700 rounded-2xl border-4 border-blue-500 flex flex-col items-center justify-center relative z-10 overflow-hidden">
+                            <div id="contact-received" class="absolute inset-0 bg-slate-600 flex flex-col items-center justify-center translate-y-full transition-transform duration-500">
+                                <div class="w-10 h-10 bg-purple-500 rounded-full mb-2 flex items-center justify-center"><i class="fa-solid fa-user"></i></div>
+                                <p class="text-[8px] text-white">Nuevo Contacto</p>
+                            </div>
+                            <i class="fa-solid fa-mobile text-4xl text-slate-500"></i>
+                        </div>
                     </div>
-                    <h3 class="text-xl font-bold mb-2 text-text-main">Emulación Tarjeta</h3>
-                    <p class="text-sm text-text-muted">El móvil se comporta como una tarjeta inteligente.</p>
-                    <div class="mt-auto pt-4 text-xs text-emerald-500 font-mono">Ej: Pagos</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="slide">
+            <h2 class="text-3xl font-bold mb-4 text-text-main"><span class="text-accent">3.</span> Modos de Operación</h2>
+            <div class="flex items-center gap-2 mb-6"><span class="bg-green-500 text-white px-3 py-1 rounded text-xs font-bold">MODO 3</span> <span class="text-green-400 font-bold">CARD EMULATION (¡El más importante!)</span></div>
+            
+            <div class="grid grid-cols-12 gap-8 h-full pb-8">
+                <div class="col-span-7 flex flex-col gap-4 overflow-y-auto">
+                    <h3 class="text-2xl font-bold text-white">"El móvil se disfraza"</h3>
+                    <p class="text-text-muted">
+                        El móvil se comporta como una tarjeta pasiva. El lector externo (Datáfono o Coche) pone la energía.
+                    </p>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="glass-panel p-4 border-l-4 border-green-500">
+                            <h4 class="font-bold text-green-400 mb-1"><i class="fa-brands fa-apple-pay"></i> Pagos</h4>
+                            <p class="text-xs text-text-muted">Funciona incluso sin batería (reserva de energía).</p>
+                        </div>
+                        <div class="glass-panel p-4 border-l-4 border-blue-500">
+                            <h4 class="font-bold text-blue-400 mb-1"><i class="fa-solid fa-car"></i> Car Key</h4>
+                            <p class="text-xs text-text-muted">Abres tu Tesla/BMW. El coche es el Lector (Activo), tu móvil la Llave (Pasivo).</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-800 p-4 rounded-lg border border-slate-600 text-sm text-slate-300 italic">
+                        "Mucha gente cree que el móvil es el lector porque es 'listo'. NO. El coche emite el campo magnético buscando la llave. Tu móvil solo enseña el certificado."
+                    </div>
+                </div>
+
+                <div class="col-span-5 glass-panel p-0 relative flex flex-col items-center justify-end bg-slate-800 overflow-hidden">
+                    <div class="absolute top-4 left-0 right-0 text-center z-20">
+                        <button onclick="triggerPayment()" class="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-full text-xs shadow-lg">
+                            <i class="fa-solid fa-wifi"></i> Acercar al TPV
+                        </button>
+                    </div>
+
+                    <div class="w-40 h-32 bg-slate-900 rounded-t-xl border-t-4 border-x-4 border-slate-600 flex flex-col items-center pt-4 relative z-0">
+                        <div id="tpv-screen" class="w-32 h-16 bg-black border border-slate-700 rounded flex items-center justify-center text-green-500 font-mono text-xs transition-colors">
+                            ESPERANDO...
+                        </div>
+                        <div class="mt-2 flex gap-2">
+                            <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                            <div class="w-2 h-2 rounded-full bg-slate-700"></div>
+                            <div class="w-2 h-2 rounded-full bg-slate-700"></div>
+                        </div>
+                    </div>
+
+                    <div id="pay-phone" class="w-24 h-40 bg-slate-700 rounded-xl border-2 border-slate-500 absolute bottom-[-150px] left-1/2 transform -translate-x-1/2 transition-all duration-700 z-10 flex items-center justify-center shadow-2xl">
+                        <i class="fa-brands fa-google-pay text-4xl text-white"></i>
+                    </div>
                 </div>
             </div>
         </section>
