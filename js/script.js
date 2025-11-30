@@ -7,7 +7,6 @@ const dotsContainer = document.getElementById('slide-dots');
 slides.forEach((_, i) => {
     const dot = document.createElement('div');
     dot.className = `w-2 h-2 rounded-full transition-all duration-300 cursor-pointer hover:bg-cyan-600 ${i === 0 ? 'bg-cyan-400 w-4' : 'bg-slate-600'}`;
-    // Permitir clic en los puntos
     dot.onclick = () => changeSlideTo(i);
     dotsContainer.appendChild(dot);
 });
@@ -41,9 +40,11 @@ function updateDisplay() {
             : 'w-2 h-2 rounded-full bg-slate-600 transition-all duration-300 cursor-pointer hover:bg-cyan-600';
     });
 
-    // Si estamos en la diapositiva del canvas, redimensionarlo
+    // Gestionar la simulación en la diapositiva 4
     if (currentSlide === 4) {
-        setTimeout(resizeFieldCanvas, 100);
+        setTimeout(initSimulation, 100);
+    } else {
+        stopSimulation();
     }
 }
 
@@ -68,38 +69,236 @@ document.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowLeft') changeSlide(-1);
 });
 
-// --- LÓGICA SIMULADOR (DIAPOSITIVA 4 / Índice 3) ---
-function runSimulation() {
-    const packet = document.getElementById('flying-packet');
-    const dev1 = document.getElementById('dev1-body');
-    const dev2 = document.getElementById('dev2-body');
+// --- LÓGICA SIMULADOR DRAG & DROP (Slide 4) ---
+let animationId;
+let simCanvas, simCtx;
+let waves = [];
+let isConnected = false;
 
-    // Reset
-    dev1.classList.remove('neon-border'); dev2.classList.remove('neon-border');
+// Variables para Drag & Drop
+let isDragging = false;
+let startX, startY, initialLeft, initialTop;
+const card = document.getElementById('draggable-card');
 
-    // Active State
-    dev1.classList.add('neon-border');
+function initSimulation() {
+    simCanvas = document.getElementById('magneticCanvas');
+    if (!simCanvas) return;
+    
+    // Configuración Canvas
+    const parent = document.getElementById('sim-container');
+    simCanvas.width = parent.clientWidth;
+    simCanvas.height = parent.clientHeight;
+    simCtx = simCanvas.getContext('2d');
+    
+    // Resetear Posición Tarjeta
+    resetCardPosition();
+    
+    // Iniciar bucle animación
+    if(!animationId) animateWaves();
 
-    // Animacion paquete
-    packet.style.transition = 'none';
-    packet.style.left = '25%';
-    packet.style.opacity = '1';
-
-    // Forzar reflow
-    packet.offsetHeight;
-
-    setTimeout(() => {
-        packet.style.transition = 'left 1s cubic-bezier(0.4, 0, 0.2, 1)';
-        packet.style.left = '65%';
-    }, 50);
-
-    setTimeout(() => {
-        dev2.classList.add('neon-border');
-        packet.style.opacity = '0';
-    }, 1050);
+    // Listeners del ratón
+    const cardEl = document.getElementById('draggable-card');
+    cardEl.addEventListener('mousedown', startDrag);
+    window.addEventListener('mouseup', stopDrag);
+    window.addEventListener('mousemove', dragCard);
 }
 
-// --- LÓGICA INSPECTOR APDU ---
+function stopSimulation() {
+    if (animationId) {
+        cancelAnimationFrame(animationId);
+        animationId = null;
+    }
+    const cardEl = document.getElementById('draggable-card');
+    if(cardEl) cardEl.removeEventListener('mousedown', startDrag);
+    window.removeEventListener('mouseup', stopDrag);
+    window.removeEventListener('mousemove', dragCard);
+}
+
+// --- LÓGICA DE ARRASTRE ---
+function startDrag(e) {
+    const cardEl = document.getElementById('draggable-card');
+    isDragging = true;
+    
+    // Guardamos posición inicial del ratón
+    startX = e.clientX;
+    startY = e.clientY;
+    
+    // Guardamos posición inicial del elemento
+    initialLeft = cardEl.offsetLeft;
+    initialTop = cardEl.offsetTop;
+
+    cardEl.style.cursor = 'grabbing';
+    cardEl.style.transition = 'none'; // Quitar transición para evitar lag
+    cardEl.style.transform = 'none';  // Quitar transform CSS para usar left/top puros
+}
+
+function stopDrag() {
+    if (!isDragging) return;
+    isDragging = false;
+    
+    const cardEl = document.getElementById('draggable-card');
+    cardEl.style.cursor = 'grab';
+    cardEl.style.transition = 'all 0.3s ease-out'; // Suavizar al soltar
+
+    // Si no está conectado, volver al sitio
+    if (!isConnected) {
+        resetCardPosition();
+    }
+}
+
+function dragCard(e) {
+    if (!isDragging) return;
+    e.preventDefault();
+    const cardEl = document.getElementById('draggable-card');
+    const container = document.getElementById('sim-container');
+
+    // Calcular desplazamiento
+    const deltaX = e.clientX - startX;
+    const deltaY = e.clientY - startY;
+
+    // Calcular nueva posición
+    let newLeft = initialLeft + deltaX;
+    let newTop = initialTop + deltaY;
+
+    // Límites para no sacar la tarjeta del cuadro
+    const maxX = container.clientWidth - cardEl.offsetWidth;
+    const maxY = container.clientHeight - cardEl.offsetHeight;
+    
+    newLeft = Math.max(0, Math.min(newLeft, maxX));
+    newTop = Math.max(0, Math.min(newTop, maxY));
+
+    // Aplicar
+    cardEl.style.left = `${newLeft}px`;
+    cardEl.style.top = `${newTop}px`;
+
+    checkOverlap();
+}
+
+function resetCardPosition() {
+    const cardEl = document.getElementById('draggable-card');
+    // Volver a la posición CSS original (usando clases o style inline inicial)
+    cardEl.style.left = ''; 
+    cardEl.style.top = '50%';
+    cardEl.style.right = '4rem';
+    cardEl.style.transform = 'translateY(-50%)';
+    updateConnectionState(false);
+}
+
+// --- DETECCIÓN DE COLISIÓN (SUPERPOSICIÓN DE RECTÁNGULOS) ---
+function checkOverlap() {
+    const reader = document.getElementById('reader-device');
+    const cardEl = document.getElementById('draggable-card');
+    
+    const r1 = reader.getBoundingClientRect();
+    const r2 = cardEl.getBoundingClientRect();
+
+    // Lógica simple: ¿Se tocan los rectángulos?
+    // Añadimos un pequeño margen de tolerancia (padding) para que sea más fácil
+    const tolerance = 20; 
+
+    const overlap = !(
+        r2.left > r1.right - tolerance ||
+        r2.right < r1.left + tolerance ||
+        r2.top > r1.bottom - tolerance ||
+        r2.bottom < r1.top + tolerance
+    );
+
+    if (overlap) {
+        if (!isConnected) updateConnectionState(true);
+    } else {
+        if (isConnected) updateConnectionState(false);
+    }
+}
+
+function updateConnectionState(connected) {
+    isConnected = connected;
+    
+    const status = document.getElementById('reader-status');
+    const successOverlay = document.getElementById('success-overlay');
+    const cardBody = document.getElementById('card-body');
+    const cardIcon = document.getElementById('card-icon');
+    const chip = document.getElementById('chip-visual');
+    const wifi = document.getElementById('wifi-icon');
+    const reader = document.getElementById('reader-device');
+
+    if (connected) {
+        // ESTADO: CONECTADO
+        status.innerText = "LEYENDO DATOS...";
+        status.className = "mt-4 text-xs font-mono font-bold text-green-400 animate-pulse";
+        
+        successOverlay.style.opacity = '1';
+        
+        cardBody.classList.add('shadow-[0_0_50px_rgba(34,197,94,0.6)]', 'border-green-400'); // Brillo Verde
+        cardIcon.className = "fa-solid fa-nfc-symbol text-5xl text-green-500 drop-shadow-[0_0_10px_rgba(34,197,94,0.8)]";
+        chip.classList.add('bg-green-400', 'border-green-600');
+        
+        wifi.className = "fa-solid fa-wifi text-6xl text-green-500 scale-110";
+        reader.classList.add('border-green-500', 'shadow-[0_0_30px_rgba(34,197,94,0.4)]');
+
+    } else {
+        // ESTADO: DESCONECTADO
+        status.innerText = "ESPERANDO TARJETA...";
+        status.className = "mt-4 text-xs font-mono font-bold text-slate-500";
+        
+        successOverlay.style.opacity = '0';
+        
+        cardBody.classList.remove('shadow-[0_0_50px_rgba(34,197,94,0.6)]', 'border-green-400');
+        cardIcon.className = "fa-solid fa-nfc-symbol text-5xl text-slate-400 transition-colors duration-300";
+        chip.classList.remove('bg-green-400', 'border-green-600');
+        
+        wifi.className = "fa-solid fa-wifi text-6xl text-slate-600";
+        reader.classList.remove('border-green-500', 'shadow-[0_0_30px_rgba(34,197,94,0.4)]');
+    }
+}
+
+// --- ANIMACIÓN ONDAS (CANVAS) ---
+function animateWaves() {
+    if (!simCtx || currentSlide !== 4) return;
+
+    simCtx.clearRect(0, 0, simCanvas.width, simCanvas.height);
+    
+    // Obtener centro del lector dinámicamente
+    const reader = document.getElementById('reader-device');
+    const container = document.getElementById('sim-container');
+    
+    if(reader && container) {
+        const rRect = reader.getBoundingClientRect();
+        const cRect = container.getBoundingClientRect();
+        const centerX = rRect.left - cRect.left + (rRect.width/2);
+        const centerY = rRect.top - cRect.top + (rRect.height/2);
+
+        // Crear ondas
+        // Si está conectado, generamos más ondas (más rápido)
+        const frequency = isConnected ? 0.8 : 0.92;
+        if (Math.random() > frequency) {
+            waves.push({ r: 40, op: 1, color: isConnected ? '34, 197, 94' : '6, 182, 212' }); // Verde si conectado, Azul si no
+        }
+
+        simCtx.lineWidth = isConnected ? 4 : 2;
+
+        waves.forEach((w, i) => {
+            w.r += isConnected ? 4 : 2; // Más rápido si conecta
+            w.op -= 0.015;
+            
+            // Color dinámico
+            const targetColor = isConnected ? '34, 197, 94' : '6, 182, 212'; 
+            w.color = targetColor;
+
+            if (w.op > 0) {
+                simCtx.beginPath();
+                simCtx.arc(centerX, centerY, w.r, 0, Math.PI * 2);
+                simCtx.strokeStyle = `rgba(${w.color}, ${w.op})`;
+                simCtx.stroke();
+            } else {
+                waves.splice(i, 1);
+            }
+        });
+    }
+    animationId = requestAnimationFrame(animateWaves);
+}
+
+
+// --- INSPECTOR APDU (Slide 6) ---
 const apduInfo = {
     'CLA': { t: 'Class Byte', d: 'Define la clase de instrucción. (0x00 Estándar, 0x80 Propietario).', c: 'border-cyan-500' },
     'INS': { t: 'Instruction Byte', d: 'Código de la operación. (Ej: 0xA4 = SELECT FILE).', c: 'border-cyan-500' },
@@ -122,64 +321,23 @@ function clearInfo() {
     document.getElementById('apdu-box').className = "bg-slate-800 p-4 border-l-4 border-slate-500 min-h-[100px] rounded-r transition-colors";
 }
 
-// --- FONDO ANIMADO CANVAS ---
-const canvas = document.getElementById('fieldCanvas');
-const ctx = canvas ? canvas.getContext('2d') : null;
-let waves = [];
-
-function resizeFieldCanvas() {
-    const parent = document.getElementById('simulation-container');
-    if (parent && canvas) {
-        canvas.width = parent.clientWidth;
-        canvas.height = parent.clientHeight;
-    }
-}
-window.addEventListener('resize', resizeFieldCanvas);
-
-function animateField() {
-    if (!ctx || currentSlide !== 4) {
-        requestAnimationFrame(animateField);
-        return;
-    }
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // Generar ondas aleatorias
-    if (Math.random() > 0.95) waves.push({ x: canvas.width * 0.3, y: canvas.height / 2, r: 10, op: 1 });
-
-    ctx.lineWidth = 2;
-    waves.forEach((w, i) => {
-        w.r += 2; w.op -= 0.02;
-        ctx.beginPath();
-        ctx.arc(w.x, w.y, w.r, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(6, 182, 212, ${w.op})`;
-        ctx.stroke();
-        if (w.op <= 0) waves.splice(i, 1);
-    });
-    requestAnimationFrame(animateField);
-}
-
 // --- MODO CLARO / OSCURO ---
 function toggleTheme() {
     const html = document.documentElement;
     const icon = document.getElementById('theme-icon');
-
-    // Comprobar si estamos en modo claro
     const isLight = html.getAttribute('data-theme') === 'light';
 
     if (isLight) {
-        // Cambiar a Oscuro
         html.setAttribute('data-theme', 'dark');
         icon.className = 'fa-solid fa-sun text-yellow-400 transition-transform group-hover:rotate-90';
         localStorage.setItem('theme', 'dark');
     } else {
-        // Cambiar a Claro
         html.setAttribute('data-theme', 'light');
         icon.className = 'fa-solid fa-moon text-slate-600 transition-transform group-hover:-rotate-12';
         localStorage.setItem('theme', 'light');
     }
 }
 
-// Cargar preferencia al iniciar
 (function loadTheme() {
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'light') {
@@ -189,11 +347,6 @@ function toggleTheme() {
     }
 })();
 
-// Init
 window.onload = function () {
     updateDisplay();
-    if (canvas) {
-        resizeFieldCanvas();
-        animateField();
-    }
 };
