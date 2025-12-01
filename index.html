@@ -949,29 +949,7 @@
     </div>
 </section>
 
-        <section class="slide">
-    <h2 class="text-3xl font-bold mb-8 text-text-main"><span class="text-accent">6.</span> Seguridad en NFC</h2>
-    <div class="grid grid-cols-2 gap-8 h-full pb-12">
-        <div class="glass-panel p-8 space-y-6 border-l-4 border-red-500">
-            <h3 class="text-xl font-bold text-red-400 mb-4">Vectores de Ataque</h3>
-            <ul class="text-sm text-text-muted space-y-4">
-                <li><strong>Eavesdropping (Escucha oculta):</strong> Intercepción pasiva de la señal. Es difícil debido al **corto alcance**.</li>
-                <li><strong>Corrupción de Datos:</strong> Interferencia activa de la señal que busca bloquear o modificar los datos. Puede causar una **Denegación de Servicio (DoS)**.</li>
-                <li><strong>Relay Attack (Ataque de relevo):</strong> El más crítico. Dos atacantes retransmiten la señal a distancia, engañando al lector para validar la transacción sin la **presencia física** de la víctima. </li>
-            </ul>
-        </div>
-        <div class="glass-panel p-8 space-y-6 border-l-4 border-green-500">
-            <h3 class="text-xl font-bold text-green-500 mb-4">Arquitectura de Protección</h3>
-            <ul class="text-sm text-text-muted space-y-4">
-                <li><strong>Elemento Seguro (SE):</strong> **Chip de hardware** dedicado e inmutable. Almacena de forma aislada las claves criptográficas y datos bancarios.</li>
-                <li><strong>Emulación de Tarjeta por Host (HCE):</strong> Alternativa **basada en software** que usa la **Tokenización** en la nube, enviando tokens de un solo uso en lugar del número real de la tarjeta.</li>
-                <li><strong>Cifrado y Protocolos:</strong> El uso de canales seguros **SSL/TLS** y estándares como **EMV** asegura que los datos interceptados sean inútiles.</li>
-            </ul>
-        </div>
-    </div>
-</section>
-
-        <section class="slide">
+<section class="slide">
     <h2 class="text-3xl font-bold mb-6 text-text-main"><span class="text-accent">7.</span> Aplicaciones Reales
     </h2>
     <div class="grid grid-cols-2 grid-rows-2 gap-6 h-full pb-8">
@@ -983,7 +961,7 @@
                     <p class="text-sm text-text-muted">Apple Pay, Google Pay.</p>
                 </div>
             </div>
-            <p class="text-xs text-text-muted mt-2">Usa el modo **Emulación de Tarjeta** con **Tokenización** para validar la transacción, sustituyendo a la tarjeta física.</p>
+            <p class="text-xs text-text-muted mt-2">Usa el modo <strong>Emulación de Tarjeta</strong> con <strong>Tokenización</strong> para validar la transacción, sustituyendo a la tarjeta física.</p>
         </div>
         <div class="glass-panel p-6 flex flex-col justify-center hover:bg-blue-500/10 transition">
             <div class="flex gap-4 items-center mb-2">
@@ -993,7 +971,7 @@
                     <p class="text-sm text-text-muted">Llaves digitales (Car Key, hoteles).</p>
                 </div>
             </div>
-            <p class="text-xs text-text-muted mt-2">Permite **desmaterializar llaves físicas**. Se usa la función **Digital Key** en automoción para compartir accesos temporales.</p>
+            <p class="text-xs text-text-muted mt-2">Permite <strong>desmaterializar llaves físicas</strong>. Se usa la función <strong>Digital Key</strong> en automoción para compartir accesos temporales.</p>
         </div>
         <div class="glass-panel p-6 flex flex-col justify-center hover:bg-purple-500/10 transition">
             <div class="flex gap-4 items-center mb-2">
@@ -1003,7 +981,7 @@
                     <p class="text-sm text-text-muted">Emparejamiento rápido BT/Wi-Fi Direct.</p>
                 </div>
             </div>
-            <p class="text-xs text-text-muted mt-2">NFC actúa como **"apretón de manos"** para intercambiar las claves de conexión y establecer un enlace de alta velocidad (BT/Wi-Fi) al instante, sin PINs.</p>
+            <p class="text-xs text-text-muted mt-2">NFC actúa como <strong>"apretón de manos"</strong> para intercambiar las claves de conexión y establecer un enlace de alta velocidad (BT/Wi-Fi) al instante, sin PINs.</p>
         </div>
         <div class="glass-panel p-6 flex flex-col justify-center hover:bg-pink-500/10 transition">
             <div class="flex gap-4 items-center mb-2">
@@ -1013,7 +991,7 @@
                     <p class="text-sm text-text-muted">Etiquetas inteligentes (Smart Posters).</p>
                 </div>
             </div>
-            <p class="text-xs text-text-muted mt-2">Usa el modo **Lector/Grabador**. El **Tag Dispatch System** lee la etiqueta (URL/Contacto) y abre la App correcta de forma automática.</p>
+            <p class="text-xs text-text-muted mt-2">Usa el modo <strong>Lector/Grabador</strong>. El <strong>Tag Dispatch System</strong> lee la etiqueta (URL/Contacto) y abre la App correcta de forma automática.</p>
         </div>
     </div>
 </section>
@@ -1219,5 +1197,6 @@
 
 
 </html>
+
 
 
